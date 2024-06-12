@@ -22,9 +22,28 @@ set(SPDLOG_INCLUDE_PATH "${CMAKE_SOURCE_DIR}/rely/spdlog/include")
 set(BUILD_EXAMPLES OFF)
 set(BUILD_TESTING OFF)
 
-add_subdirectory(rely/)
 add_subdirectory(lib/)
 add_subdirectory(app/)
+
+
+# add_subdirectory(rtklib-2.4.3-b34)
+#libevent option
+if (NOT TARGET libevent)
+    set(EVENT__LIBRARY_TYPE STATIC)
+    set(EVENT__DISABLE_OPENSSL ON)
+    set(EVENT__DISABLE_BENCHMARK ON)
+    set(EVENT__DISABLE_TESTS ON)
+    set(EVENT__DISABLE_REGRESS ON)
+    set(EVENT__DISABLE_SAMPLES ON)
+    add_subdirectory(rely/libevent)
+endif() 
+
+#yaml-cpp option
+set(YAML_BUILD_SHARED_LIBS OFF)
+set(YAML_CPP_BUILD_TOOLS OFF)
+add_subdirectory(rely/yaml-cpp)
+# add_subdirectory(libssh2-libssh2-1.11.0/)
+
 
 
 
