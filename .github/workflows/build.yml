@@ -30,7 +30,7 @@ jobs:
       with:
         repository: NavTool/base_third_relys
         submodules: true  # 拉取子模块
-        path: rely
+        path: ${{github.workspace}}/rely
         
 
 
