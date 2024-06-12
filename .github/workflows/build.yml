@@ -22,16 +22,17 @@ jobs:
     steps:
     - uses: actions/checkout@v4.1.4
       with:
-        repository: NavTool/base_third_relys
-        submodules: true  # 拉取子模块
-        token: ${{ secrets.GITHUB_TOKEN }}
-        path: rely
-        
-    - uses: actions/checkout@v4.1.4
-      with:
         fetch-depth: 0
         fetch-tags: true  # 获取所有的 Git 标签
         submodules: true  # 拉取子模块
+        
+    - uses: actions/checkout@v4.1.4
+      with:
+        repository: NavTool/base_third_relys
+        submodules: true  # 拉取子模块
+        path: rely
+        
+
 
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
