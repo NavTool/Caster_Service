@@ -24,6 +24,7 @@ jobs:
       with:
         fetch-depth: 0
         fetch-tags: true  # 获取所有的 Git 标签
+        submodules: true  # 拉取子模块
 
     - uses: actions/checkout@v4.1.4
       with:
