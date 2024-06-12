@@ -15,8 +15,8 @@ IF(CMAKE_HOST_SYSTEM_NAME MATCHES "Windows")
 add_definitions(-DWIN32)
 ENDIF()
 
-set(JSON_INCLUDE_PATH "${CMAKE_SOURCE_DIR}/third/json-3.11.3/include")
-set(SPDLOG_INCLUDE_PATH "${CMAKE_SOURCE_DIR}/rely/spdlog-1.12.0/include")
+set(JSON_INCLUDE_PATH "${CMAKE_SOURCE_DIR}/rely/json/include")
+set(SPDLOG_INCLUDE_PATH "${CMAKE_SOURCE_DIR}/rely/spdlog/include")
 
 #全局设置选项
 set(BUILD_EXAMPLES OFF)
