@@ -145,13 +145,13 @@ configure_file(${CMAKE_SOURCE_DIR}/.cmake/version.h.in version.h @ONLY)
 target_include_directories(${EXE_NAME}  PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
 
 #基于工程目录下的配置文件 生成 执行目录下的配置文件
-set_target_properties(${EXE_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin/Caster_Service")
-configure_file(${CMAKE_SOURCE_DIR}/.cmake/Auth_Verify.yml.in ${CMAKE_SOURCE_DIR}/bin/Caster_Service/conf/Auth_Verify.yml @ONLY)
-configure_file(${CMAKE_SOURCE_DIR}/.cmake/Caster_Core.yml.in ${CMAKE_SOURCE_DIR}/bin/Caster_Service/conf/Caster_Core.yml @ONLY)
-configure_file(${CMAKE_SOURCE_DIR}/.cmake/Service_Setting.yml.in ${CMAKE_SOURCE_DIR}/bin/Caster_Service/conf/Service_Setting.yml @ONLY)
-configure_file(${CMAKE_SOURCE_DIR}/.cmake/redis.conf.in ${CMAKE_SOURCE_DIR}/bin/Caster_Service/env/redis.conf @ONLY)
+set_target_properties(${EXE_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin")
+configure_file(${CMAKE_SOURCE_DIR}/.cmake/Auth_Verify.yml.in ${CMAKE_SOURCE_DIR}/bin/conf/Auth_Verify.yml @ONLY)
+configure_file(${CMAKE_SOURCE_DIR}/.cmake/Caster_Core.yml.in ${CMAKE_SOURCE_DIR}/bin/conf/Caster_Core.yml @ONLY)
+configure_file(${CMAKE_SOURCE_DIR}/.cmake/Service_Setting.yml.in ${CMAKE_SOURCE_DIR}/bin/conf/Service_Setting.yml @ONLY)
+configure_file(${CMAKE_SOURCE_DIR}/.cmake/redis.conf.in ${CMAKE_SOURCE_DIR}/bin/env/redis.conf @ONLY)
 
-message(STATUS "BINARY_DIR : ${CMAKE_SOURCE_DIR}/bin/Caster_Service")
+message(STATUS "BINARY_DIR : ${CMAKE_SOURCE_DIR}/bin")
 #Koro_NavTool
 target_link_libraries(${EXE_NAME} knt)
 #caster_core
