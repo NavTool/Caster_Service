@@ -16,3 +16,6 @@
 [submodule "lib/caster_core-plugin-redis"]
 	path = lib/caster_core-plugin-redis
 	url = https://github.com/NavTool/caster_core-plugin-redis.git
+[submodule "lib/nav_tool-plugin-cpp"]
+	path = lib/nav_tool-plugin-cpp
+	url = https://github.com/NavTool/nav_tool-plugin-cpp.git
