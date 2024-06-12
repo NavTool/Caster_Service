@@ -25,7 +25,7 @@ jobs:
         repository: NavTool/base_third_relys
         submodules: true  # 拉取子模块
         token: ${{ secrets.GITHUB_TOKEN }}
-        path: ${{github.workspace}}/rely
+        path: rely
         
     - uses: actions/checkout@v4.1.4
       with:
