@@ -6,7 +6,7 @@ git clone --recurse-submodules https://github.com/NavTool/base_third_relys.git r
 #构建目录
 mkdir build
 #
-cd bulid
+cd build
 #执行CMAKE
 cmake ..
 #构建
