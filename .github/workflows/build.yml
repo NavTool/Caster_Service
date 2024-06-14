@@ -26,7 +26,6 @@ jobs:
         fetch-tags: true  # 获取所有的 Git 标签
         submodules: true  # 拉取子模块
         
-
     - name: Build APP
       run: |
         chmod +x ci/build.sh

@@ -2,12 +2,10 @@
 # 安装 Ninja（如果尚未安装）
 if ! command -v ninja &> /dev/null; then
     echo "Ninja is not installed. Installing Ninja..."
-    sudo apt-get update
+    # sudo apt-get update
     sudo apt-get install -y ninja-build
 fi
 
-#检出主仓库代码
-#检出子模块代码
 #检出rely仓库#检出rely子模块代码
 git clone --recurse-submodules https://github.com/NavTool/base_third_relys.git rely
 
