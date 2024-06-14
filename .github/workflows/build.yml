@@ -28,7 +28,9 @@ jobs:
         
 
     - name: build
-      run: ci/build.sh
+      run: |
+        chmod +x ci/build.sh
+        ci/build.sh
 
 
     # - name: Configure CMake
