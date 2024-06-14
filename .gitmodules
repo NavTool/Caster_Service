@@ -7,3 +7,6 @@
 [submodule "lib/nav_tool-plugin-cpp"]
 	path = lib/nav_tool-plugin-cpp
 	url = https://github.com/NavTool/nav_tool-plugin-cpp.git
+[submodule "lib/caster_extra-plugin-base"]
+	path = lib/caster_extra-plugin-base
+	url = https://github.com/NavTool/caster_extra-plugin-base.git
