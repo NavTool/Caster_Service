@@ -162,12 +162,6 @@ target_link_libraries(${EXE_NAME} event)
 target_link_libraries(${EXE_NAME} event_core)
 target_link_libraries(${EXE_NAME} event_extra)
 
-#json
-set(JSON_INCLUDE_PATH "${CMAKE_SOURCE_DIR}/rely/json/include")
-
-#spdlog
-set(SPDLOG_INCLUDE_PATH "${CMAKE_SOURCE_DIR}/rely/spdlog/include")
-
 #nlohmann/json
 include_directories(${EXE_NAME} ${JSON_INCLUDE_PATH})
 #spdlog

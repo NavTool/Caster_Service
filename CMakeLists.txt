@@ -20,6 +20,16 @@ ENDIF()
 # set(BUILD_EXAMPLES OFF)
 # set(BUILD_TESTING OFF)
 
+if (CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
+    #是主项目
+    set(JSON_INCLUDE_PATH "${CMAKE_SOURCE_DIR}/rely/json/include")
+    set(SPDLOG_INCLUDE_PATH "${CMAKE_SOURCE_DIR}/rely/spdlog/include")
+else()
+    #是子项目
+endif()
+
+
+
 add_subdirectory(rely/)
 add_subdirectory(lib/)
 add_subdirectory(app/)
