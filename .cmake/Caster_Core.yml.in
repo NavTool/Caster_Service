@@ -2,7 +2,7 @@
 
 Caster_Setting:
   Update_Intv: 1         #内部数据更新频率
-  Unactive_Time: 30      #非活动连接判断间隔
+  Unactive_Time: 5      #非活动连接判断间隔
 
 Base_Setting:
   Enable_Mult: false      #允许多连接采用同一挂载点      
