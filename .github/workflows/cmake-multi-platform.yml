@@ -80,7 +80,7 @@ jobs:
       run: cmake --build ${{ steps.strings.outputs.build-output-dir }} --config ${{ matrix.build_type }}
       
     - name: Build Env for Linux
-    if: runner.os == 'Linux'
+      if: runner.os == 'Linux'
       run: |
         cd ${{github.workspace}}/env/redis-7.2.1 && make MALLOC=libc
         cp ${{github.workspace}}/env/redis-7.2.1/src/redis-server ${{github.workspace}}/bin/env
