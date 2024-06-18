@@ -89,9 +89,9 @@ jobs:
           cp ${{github.workspace}}/env/stop-redis.sh ${{github.workspace}}/bin/env
         elif [ "${{ runner.os }}" == "Windows" ]; then
           echo "Building on Windows"
-          move ${{github.workspace}}\bin\${{env.BUILD_TYPE}}\* ${{github.workspace}}\bin\
-          rmdir ${{github.workspace}}\bin\${{env.BUILD_TYPE}}
-          xcopy /S /E /I ${{github.workspace}}\env\Redis-7.0.15-Windows-x64\ ${{github.workspace}}\bin\env\   
+          # move ${{github.workspace}}\bin\${{env.BUILD_TYPE}}\* ${{github.workspace}}\bin\
+          # rmdir ${{github.workspace}}\bin\${{env.BUILD_TYPE}}
+          # xcopy /S /E /I ${{github.workspace}}\env\Redis-7.0.15-Windows-x64\ ${{github.workspace}}\bin\env\   
         fi
  
     # - name: Test
