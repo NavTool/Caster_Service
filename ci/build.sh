@@ -1,8 +1,8 @@
 #!/bin/bash
 
-c_compiler=$1
+# c_compiler=$1
 
-cpp_compiler=$2
+# cpp_compiler=$2
 
 # 安装 Ninja（如果尚未安装）
 if ! command -v ninja &> /dev/null; then
@@ -19,7 +19,7 @@ mkdir build
 #
 cd build
 #执行CMAKE
-cmake -G Ninja -DCMAKE_CXX_COMPILER=$cpp_compiler  -DCMAKE_C_COMPILER=$c_compiler ..
+cmake -G Ninja ..
 #构建
 ninja
 

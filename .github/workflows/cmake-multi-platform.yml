@@ -93,7 +93,6 @@ jobs:
           rmdir ${{github.workspace}}\bin\${{env.BUILD_TYPE}}
           xcopy /S /E /I ${{github.workspace}}\env\Redis-7.0.15-Windows-x64\ ${{github.workspace}}\bin\env\   
         fi
-      shell: bash
  
     # - name: Test
     #   working-directory: ${{ steps.strings.outputs.build-output-dir }}
