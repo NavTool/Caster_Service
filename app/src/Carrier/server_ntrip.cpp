@@ -65,7 +65,8 @@ int server_ntrip::stop()
     close_req["req_type"] = CLOSE_NTRIP_SERVER;
     QUEUE::Push(close_req);
 
-    CASTER::Set_Base_Station_State_OFFLINE(_mount_point.c_str(), NULL, _connect_key.c_str());
+    CASTER2::Withdraw_Base_Record(_mount_point.c_str(), _connect_key.c_str());
+    // CASTER::Set_Base_Station_State_OFFLINE(_mount_point.c_str(), NULL, _connect_key.c_str());
     AUTH::Add_Logout_Record(_user_name.c_str(), _connect_key.c_str());
 
     spdlog::info("[{}]: mount [{}] is offline, addr:[{}:{}]", __class__, _mount_point, _ip, _port);
@@ -86,7 +87,8 @@ int server_ntrip::runing()
 
     bev_send_reply();
 
-    CASTER::Set_Base_Station_State_ONLINE(_mount_point.c_str(), _user_name.c_str(), _connect_key.c_str());
+    CASTER2::Register_Base_Record(_mount_point.c_str(), _connect_key.c_str(), Caster_Register_Callback, this);
+    // CASTER::Set_Base_Station_State_ONLINE(_mount_point.c_str(), _user_name.c_str(), _connect_key.c_str());
 
     spdlog::info("[{}]: mount [{}] is online, addr:[{}:{}]", __class__, _mount_point, _ip, _port);
 
@@ -214,7 +216,8 @@ int server_ntrip::publish_data_from_chunck()
         data[_chuncked_size + 2] = '\0';
 
         evbuffer_remove(_recv_evbuf, data, _chuncked_size);
-        CASTER::Pub_Base_Station_Raw_Data(_mount_point.c_str(), data, _chuncked_size);
+        CASTER2::Pub_Base_Raw_Data(_mount_point.c_str(), _connect_key.c_str(), data, _chuncked_size);
+        // CASTER::Pub_Base_Station_Raw_Data(_mount_point.c_str(), data, _chuncked_size);
 
         _chuncked_size = 0;
         delete[] data;
@@ -242,7 +245,8 @@ int server_ntrip::publish_data_from_evbuf()
     data[length] = '\0';
 
     evbuffer_remove(_recv_evbuf, data, length);
-    CASTER::Pub_Base_Station_Raw_Data(_mount_point.c_str(), data, length);
+    CASTER2::Pub_Base_Raw_Data(_mount_point.c_str(), _connect_key.c_str(), data, length);
+    // CASTER::Pub_Base_Station_Raw_Data(_mount_point.c_str(), data, length);
 
     delete[] data;
     return 0;
@@ -258,6 +262,19 @@ void server_ntrip::Auth_Login_Callback(const char *request, void *arg, AuthReply
     else
     {
         spdlog::info("[{}]: AUTH_REPLY_ERROR user [{}] , using mount [{}], addr:[{}:{}]", __class__, svr->_user_name, svr->_mount_point, svr->_ip, svr->_port);
+        svr->stop();
+    }
+}
+
+void server_ntrip::Caster_Register_Callback(const char *request, void *arg, CatserReply *reply)
+{
+    auto svr = static_cast<server_ntrip *>(arg);
+    if (reply->type == AUTH_REPLY_OK)
+    {
+    }
+    else
+    {
+        spdlog::info("[{}:{}]: CASTER_REPLY_ERROR:[{}], user [{}] , using mount [{}], addr:[{}:{}]", __class__, __func__, reply->str, svr->_user_name, svr->_mount_point, svr->_ip, svr->_port);
         svr->stop();
     }
 }

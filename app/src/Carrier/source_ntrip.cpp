@@ -32,7 +32,8 @@ int source_ntrip::start()
 {
     bufferevent_setcb(_bev, NULL, WriteCallback, EventCallback, this);
 
-    _source_list = CASTER::Get_Source_Table_Text();
+    _source_list = CASTER2::Get_Source_Table_Text();
+    // _source_list = CASTER::Get_Source_Table_Text();
     build_source_table();
     bufferevent_enable(_bev, EV_WRITE);
 
@@ -62,7 +63,7 @@ void source_ntrip::WriteCallback(bufferevent *bev, void *arg)
         auto UnsendBufferSize = evbuffer_get_length(bufferevent_get_output(bev));
         if (UnsendBufferSize == 0)
         {
-            spdlog::info("[{}]: Send SourceTable Finished, user [{}] ,  addr:[{}:{}]", __class__, svr->_user_name,  svr->_ip, svr->_port);
+            spdlog::info("[{}]: Send SourceTable Finished, user [{}] ,  addr:[{}:{}]", __class__, svr->_user_name, svr->_ip, svr->_port);
             svr->stop();
         }
     }
@@ -96,7 +97,7 @@ int source_ntrip::build_source_table()
         evbuffer_add_printf(_evbuf, "Ntrip-Version: Ntrip/2.0\r\n");
         // evbuffer_add_printf(_evbuf, "Ntrip-Flag: st_filter,st_auth,st_match,st_strict,rtsp\r\n");
         evbuffer_add_printf(_evbuf, "Server: Koro_Caster/%s\r\n", PROJECT_TAG_VERSION);
-        evbuffer_add_printf(_evbuf, "Date: %s\r\n",util_get_http_date().c_str());
+        evbuffer_add_printf(_evbuf, "Date: %s\r\n", util_get_http_date().c_str());
         evbuffer_add_printf(_evbuf, "Connection: close\r\n");
         evbuffer_add_printf(_evbuf, "Content-Type: gnss/sourcetable\r\n");
         evbuffer_add_printf(_evbuf, "Content-Length: %ld\r\n", _source_list.size() + 16);
@@ -108,7 +109,7 @@ int source_ntrip::build_source_table()
     {
         evbuffer_add_printf(_evbuf, "SOURCETABLE 200 OK\r\n");
         evbuffer_add_printf(_evbuf, "Server: Koro_Caster/%s\r\n", PROJECT_TAG_VERSION);
-        evbuffer_add_printf(_evbuf, "Date: %s\r\n",util_get_http_date().c_str());
+        evbuffer_add_printf(_evbuf, "Date: %s\r\n", util_get_http_date().c_str());
         evbuffer_add_printf(_evbuf, "Connection: close\r\n");
         evbuffer_add_printf(_evbuf, "Content-Type: text/plain\r\n");
         evbuffer_add_printf(_evbuf, "Content-Length: %ld\r\n", _source_list.size() + 16);

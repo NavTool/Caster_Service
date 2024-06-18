@@ -100,10 +100,10 @@ set(COMPONTENT_TYPE_SOURCE
 set(CARRIER_TYPE_SOURCE
     include/Carrier/client_ntrip.h
     include/Carrier/server_ntrip.h
-    include/Carrier/server_relay.h
+    # include/Carrier/server_relay.h
     src/Carrier/client_ntrip.cpp
     src/Carrier/server_ntrip.cpp
-    src/Carrier/server_relay.cpp
+    # src/Carrier/server_relay.cpp
     include/Carrier/source_ntrip.h
     src/Carrier/source_ntrip.cpp
 )

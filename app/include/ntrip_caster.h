@@ -6,7 +6,7 @@
 #include "Connector/ntrip_relay_connector.h"
 #include "Carrier/client_ntrip.h"
 #include "Carrier/server_ntrip.h"
-#include "Carrier/server_relay.h"
+// #include "Carrier/server_relay.h"
 #include "Carrier/source_ntrip.h"
 #include "DB/relay_account_tb.h"
 #include "Extra/heart_beat.h"
@@ -86,17 +86,14 @@ private:
 
 private:
     // 连接器
-    ntrip_compat_listener *_compat_listener;  // 被动接收Ntrip连接
+    ntrip_compat_listener *_compat_listener; // 被动接收Ntrip连接
     // ntrip_relay_connector *_relay_connetcotr; // 主动创建Ntrip连接
 
     // 连接-对象索引
-    std::unordered_map<std::string, bufferevent *> _connect_map; // Connect_Key,bev或evhttp
+    std::unordered_map<std::string, bufferevent *> _connect_map; // Connect_Key,bev
     std::unordered_map<std::string, server_ntrip *> _server_map; // Connect_Key,client_ntrip
     std::unordered_map<std::string, client_ntrip *> _client_map; // Connect_Key,client_ntrip
     std::unordered_map<std::string, source_ntrip *> _source_map; // Connect_Key,client_ntrip
-
-    // 挂载点-对象索引
-    std::unordered_map<std::string, std::string> _server_key; // Mount_Point,Connect_Key
 
 private:
     event_base *_base;
@@ -113,7 +110,4 @@ public:
     // libevent回调
     static void Request_Process_Cb(evutil_socket_t fd, short what, void *arg);
     static void TimeoutCallback(evutil_socket_t fd, short events, void *arg);
-
-    static void Client_Check_Mount_Point_Callback(const char *request, void *arg, CatserReply *reply);
-    static void Server_Check_Mount_Point_Callback(const char *request, void *arg, CatserReply *reply);
 };

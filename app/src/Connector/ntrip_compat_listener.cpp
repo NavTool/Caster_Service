@@ -309,27 +309,28 @@ int ntrip_compat_listener::Process_GET_Request(bufferevent *bev, std::string con
     }
     else
     {
-        switch (CASTER::Check_Mount_Type(mount.c_str()))
-        {
-        case CASTER::STATION_COMMON:
-            req["req_type"] = REQUEST_CLIENT_LOGIN;
-            break;
-        case CASTER::STATION_NEAREST:
-            req["req_type"] = REQUEST_VIRTUAL_LOGIN;
-            req["mount_group"] = MOUNT_TYPE_NEAREST;
-            break;
-        case CASTER::STATION_RELAY:
-            req["req_type"] = REQUEST_VIRTUAL_LOGIN;
-            req["mount_group"] = MOUNT_TYPE_RELAY;
-            break;
-        case CASTER::STATION_VIRTUAL:
-            req["req_type"] = REQUEST_VIRTUAL_LOGIN;
-            req["mount_group"] = MOUNT_TYPE_VIRTUAL;
-            break;
-        default: // CASTER::STATION_COMMON
+        req["req_type"] = REQUEST_CLIENT_LOGIN;
+        // switch (CASTER::Check_Mount_Type(mount.c_str()))
+        // {
+        // case CASTER::STATION_COMMON:
+        //     req["req_type"] = REQUEST_CLIENT_LOGIN;
+        //     break;
+        // case CASTER::STATION_NEAREST:
+        //     req["req_type"] = REQUEST_VIRTUAL_LOGIN;
+        //     req["mount_group"] = MOUNT_TYPE_NEAREST;
+        //     break;
+        // case CASTER::STATION_RELAY:
+        //     req["req_type"] = REQUEST_VIRTUAL_LOGIN;
+        //     req["mount_group"] = MOUNT_TYPE_RELAY;
+        //     break;
+        // case CASTER::STATION_VIRTUAL:
+        //     req["req_type"] = REQUEST_VIRTUAL_LOGIN;
+        //     req["mount_group"] = MOUNT_TYPE_VIRTUAL;
+        //     break;
+        // default: // CASTER::STATION_COMMON
 
-            break;
-        }
+        //     break;
+        // }
     }
 
     std::string userID = req["user_baseID"];
