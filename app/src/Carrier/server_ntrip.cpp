@@ -174,7 +174,7 @@ int server_ntrip::publish_recv_raw_data()
 {
     if (_transfer_with_chunked)
     {
-        publish_data_from_chunck();
+        publish_data_from_chunk();
     }
     else
     {
@@ -183,55 +183,55 @@ int server_ntrip::publish_recv_raw_data()
     return 0;
 }
 
-int server_ntrip::publish_data_from_chunck()
+int server_ntrip::publish_data_from_chunk()
 {
-    if (_chuncked_size == 0)
+    if (_chunked_size == 0)
     {
         // 先读取一行
-        char *chunck_head_data;
-        size_t chunck_head_size;
-        chunck_head_data = evbuffer_readln(_recv_evbuf, &chunck_head_size, EVBUFFER_EOL_CRLF);
+        char *chunk_head_data;
+        size_t chunk_head_size;
+        chunk_head_data = evbuffer_readln(_recv_evbuf, &chunk_head_size, EVBUFFER_EOL_CRLF);
 
-        if (!chunck_head_data)
+        if (!chunk_head_data)
         {
             spdlog::warn("[{}:{}: chunked data error,close connect! {},{},{}", __class__, __func__, _mount_point, _ip, _port);
             stop();
             return 1;
         }
-        sscanf(chunck_head_data, "%zx", &chunck_head_size);
+        sscanf(chunk_head_data, "%zx", &chunk_head_size);
 
-        _chuncked_size = chunck_head_size;
+        _chunked_size = chunk_head_size;
 
         // 读取一行
-        // 获取chunck长度 更新chuncked_size
+        // 获取chunk长度 更新chunked_size
     }
 
-    // 判断长剩余长度是否满足chunck长度（即块数据都已接收到）
+    // 判断长剩余长度是否满足chunk长度（即块数据都已接收到）
 
     size_t length = evbuffer_get_length(_recv_evbuf);
 
-    if (_chuncked_size + 2 <= length) // 还有回车换行
+    if (_chunked_size + 2 <= length) // 还有回车换行
     {
-        char *data = new char[_chuncked_size + 3];
-        data[_chuncked_size + 2] = '\0';
+        char *data = new char[_chunked_size + 3];
+        data[_chunked_size + 2] = '\0';
 
-        evbuffer_remove(_recv_evbuf, data, _chuncked_size);
-        CASTER2::Pub_Base_Raw_Data(_mount_point.c_str(), _connect_key.c_str(), data, _chuncked_size);
-        // CASTER::Pub_Base_Station_Raw_Data(_mount_point.c_str(), data, _chuncked_size);
+        evbuffer_remove(_recv_evbuf, data, _chunked_size);
+        CASTER2::Pub_Base_Raw_Data(_mount_point.c_str(), _connect_key.c_str(), data, _chunked_size);
+        // CASTER::Pub_Base_Station_Raw_Data(_mount_point.c_str(), data, _chunked_size);
 
-        _chuncked_size = 0;
+        _chunked_size = 0;
         delete[] data;
     }
     else
     {
         return 1;
-        // 不满足，记录当前chunck长度，等待后续数据来了再发送
+        // 不满足，记录当前chunk长度，等待后续数据来了再发送
     }
 
     // 如果evbuffer中还有未发送的数据，那就再进行一次函数
     if (evbuffer_get_length(_recv_evbuf) > 0)
     {
-        publish_data_from_chunck();
+        publish_data_from_chunk();
     }
 
     return 0;

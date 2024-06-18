@@ -22,7 +22,7 @@ private:
 
     bool _NtripVersion2 = false;
     bool _transfer_with_chunked = false;
-    size_t _chuncked_size = 0;
+    size_t _chunked_size = 0;
 
     json _conf;
 
@@ -56,7 +56,7 @@ private:
     int send_heart_beat_to_server();
 
     int publish_recv_raw_data();
-    int publish_data_from_chunck();
+    int publish_data_from_chunk();
     int publish_data_from_evbuf();
 
     static void ReadCallback(struct bufferevent *bev, void *arg);
