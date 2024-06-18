@@ -79,20 +79,23 @@ jobs:
       # Build your program with the given configuration. Note that --config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
       run: cmake --build ${{ steps.strings.outputs.build-output-dir }} --config ${{ matrix.build_type }}
       
-    - name: Build Env
+    - name: Build Env for Linux
+    if: runner.os == 'Linux'
       run: |
-        if [ "${{ runner.os }}" == "Linux" ]; then
-          echo "Building on Linux"
-          cd ${{github.workspace}}/env/redis-7.2.1 && make MALLOC=libc
-          cp ${{github.workspace}}/env/redis-7.2.1/src/redis-server ${{github.workspace}}/bin/env
-          cp ${{github.workspace}}/env/start-redis.sh ${{github.workspace}}/bin/env
-          cp ${{github.workspace}}/env/stop-redis.sh ${{github.workspace}}/bin/env
-        elif [ "${{ runner.os }}" == "Windows" ]; then
-          echo "Building on Windows"
-          # move ${{github.workspace}}\bin\${{env.BUILD_TYPE}}\* ${{github.workspace}}\bin\
-          # rmdir ${{github.workspace}}\bin\${{env.BUILD_TYPE}}
-          # xcopy /S /E /I ${{github.workspace}}\env\Redis-7.0.15-Windows-x64\ ${{github.workspace}}\bin\env\   
-        fi
+        cd ${{github.workspace}}/env/redis-7.2.1 && make MALLOC=libc
+        cp ${{github.workspace}}/env/redis-7.2.1/src/redis-server ${{github.workspace}}/bin/env
+        cp ${{github.workspace}}/env/start-redis.sh ${{github.workspace}}/bin/env
+        cp ${{github.workspace}}/env/stop-redis.sh ${{github.workspace}}/bin/env
+      shell: bash
+
+    - name: Build Env for Windows
+      if: runner.os == 'Windows'
+      run: |
+        move ${{github.workspace}}\bin\${{env.BUILD_TYPE}}\* ${{github.workspace}}\bin\
+        rmdir ${{github.workspace}}\bin\${{env.BUILD_TYPE}}
+        xcopy /S /E /I ${{github.workspace}}\env\Redis-7.0.15-Windows-x64\ ${{github.workspace}}\bin\env\   
+      shell: cmd
+
  
     # - name: Test
     #   working-directory: ${{ steps.strings.outputs.build-output-dir }}
