@@ -60,7 +60,7 @@ json load_Caster_Conf(const char *conf_directory)
     auto Ntrip_Listener_Setting = Conf["Ntrip_Listener_Setting"];
     conf["Ntrip_Listener"]["Port"] = Ntrip_Listener_Setting["Listen_Port"].as<int>();
     conf["Ntrip_Listener"]["Timeout"] = Ntrip_Listener_Setting["Connect_Timeout"].as<int>();
-    conf["Ntrip_Listener"]["Enable_No_CRLF"]=Ntrip_Listener_Setting["Header_No_CRLF"].as<bool>();
+    conf["Ntrip_Listener"]["Enable_No_CRLF"] = Ntrip_Listener_Setting["Header_No_CRLF"].as<bool>();
 
     auto Server_Setting = Conf["Server_Setting"];
     conf["Server_Setting"]["Timeout"] = Server_Setting["Connect_Timeout"].as<int>();
@@ -95,6 +95,18 @@ json load_Core_Conf(const char *conf_directory)
     json conf;
     std::string Path = conf_directory;
     YAML::Node Conf = YAML::LoadFile(Path + "Caster_Core.yml");
+
+    auto Caster_Setting = Conf["Caster_Setting"];
+    conf["Update_Intv"] = Caster_Setting["Update_Intv"].as<int>();
+    conf["Unactive_Time"] = Caster_Setting["Unactive_Time"].as<int>();
+
+    auto Base_Setting = Conf["Base_Setting"];
+    conf["Base_Enable_Mult"] = Base_Setting["Enable_Mult"].as<bool>();
+    conf["Base_Keep_Early"] = Base_Setting["Keep_Early"].as<bool>();
+
+    auto Rover_Setting = Conf["Rover_Setting"];
+    conf["Rover_Enable_Mult"] = Rover_Setting["Enable_Mult"].as<bool>();
+    conf["Rover_Keep_Early"] = Rover_Setting["Keep_Early"].as<bool>();
 
     auto Redis_Setting = Conf["Reids_Connect_Setting"];
     conf["Redis_IP"] = Redis_Setting["IP"].as<std::string>();
