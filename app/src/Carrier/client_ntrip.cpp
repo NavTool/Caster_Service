@@ -61,15 +61,12 @@ int client_ntrip::runing()
         bufferevent_set_timeouts(_bev, &_bev_read_timeout_tv, NULL);
     }
 
-    bev_send_reply();
+    // bev_send_reply();
 
     // 添加一个请求，订阅指定频道数据
-    CASTER2::Register_Rover_Record(_user_name.c_str(), _connect_key.c_str(), Caster_Register_Callback, this);
     CASTER2::Sub_Base_Raw_Data(_mount_point.c_str(), _connect_key.c_str(), Caster_Sub_Callback, this);
     // CASTER::Set_Rover_Client_State_ONLINE(_mount_point.c_str(), NULL, _connect_key.c_str());
     // CASTER::Sub_Base_Station_Raw_Data(_mount_point.c_str(), _connect_key.c_str(), Caster_Sub_Callback, this);
-
-    spdlog::info("[{}]: user [{}] is login, using mount [{}], addr:[{}:{}]", __class__, _user_name, _mount_point, _ip, _port);
 
     return 0;
 }
@@ -188,7 +185,8 @@ void client_ntrip::Auth_Login_Callback(const char *request, void *arg, AuthReply
 
     if (reply->type == AUTH_REPLY_OK)
     {
-        svr->runing();
+        // svr->runing();
+        CASTER2::Register_Rover_Record(svr->_user_name.c_str(), svr->_connect_key.c_str(), Caster_Register_Callback, svr);
     }
     else
     {
@@ -202,6 +200,7 @@ void client_ntrip::Caster_Register_Callback(const char *request, void *arg, Cats
     auto svr = static_cast<client_ntrip *>(arg);
     if (reply->type == AUTH_REPLY_OK)
     {
+        svr->runing();
     }
     else
     {
@@ -217,6 +216,12 @@ void client_ntrip::Caster_Sub_Callback(const char *request, void *arg, CatserRep
     if (reply->type == CASTER_REPLY_STRING)
     {
         svr->transfer_sub_raw_data(reply->str, reply->len);
+    }
+    else if (reply->type == CASTER_REPLY_OK)
+    {
+        spdlog::info("[{}]: user [{}] is login, using mount [{}], addr:[{}:{}]", __class__, svr->_user_name, svr->_mount_point, svr->_ip, svr->_port);
+
+        svr->bev_send_reply();
     }
     else if (reply->type == CASTER_REPLY_ERR)
     {

@@ -87,7 +87,7 @@ int server_ntrip::runing()
 
     bev_send_reply();
 
-    CASTER2::Register_Base_Record(_mount_point.c_str(), _connect_key.c_str(), Caster_Register_Callback, this);
+    // CASTER2::Register_Base_Record(_mount_point.c_str(), _connect_key.c_str(), Caster_Register_Callback, this);
     // CASTER::Set_Base_Station_State_ONLINE(_mount_point.c_str(), _user_name.c_str(), _connect_key.c_str());
 
     spdlog::info("[{}]: mount [{}] is online, addr:[{}:{}]", __class__, _mount_point, _ip, _port);
@@ -257,7 +257,8 @@ void server_ntrip::Auth_Login_Callback(const char *request, void *arg, AuthReply
     auto svr = static_cast<server_ntrip *>(arg);
     if (reply->type == AUTH_REPLY_OK)
     {
-        svr->runing();
+        // svr->runing();
+        CASTER2::Register_Base_Record(svr->_mount_point.c_str(), svr->_connect_key.c_str(), Caster_Register_Callback, svr);
     }
     else
     {
@@ -271,6 +272,7 @@ void server_ntrip::Caster_Register_Callback(const char *request, void *arg, Cats
     auto svr = static_cast<server_ntrip *>(arg);
     if (reply->type == AUTH_REPLY_OK)
     {
+        svr->runing();
     }
     else
     {
