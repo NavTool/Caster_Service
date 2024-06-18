@@ -198,7 +198,7 @@ int server_ntrip::publish_data_from_chunck()
             stop();
             return 1;
         }
-        sscanf(chunck_head_data, "%lx", &chunck_head_size);
+        sscanf(chunck_head_data, "%zx", &chunck_head_size);
 
         _chuncked_size = chunck_head_size;
 
