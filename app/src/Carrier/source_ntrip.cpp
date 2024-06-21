@@ -32,8 +32,8 @@ int source_ntrip::start()
 {
     bufferevent_setcb(_bev, NULL, WriteCallback, EventCallback, this);
 
-    _source_list = CASTER2::Get_Source_Table_Text();
-    // _source_list = CASTER::Get_Source_Table_Text();
+    _source_list = CASTER::Get_Source_Table_Text();
+    
     build_source_table();
     bufferevent_enable(_bev, EV_WRITE);
 

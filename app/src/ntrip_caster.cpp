@@ -106,7 +106,7 @@ int ntrip_caster::compontent_init()
     AUTH::Init(_auth_verify_setting.dump().c_str(), _base);
 
     // 初始化Caster数据分发核心：当前采用的是Redis，后续开发支持脱离redis运行
-    CASTER2::Init(_caster_core_setting.dump().c_str(), _base);
+    CASTER::Init(_caster_core_setting.dump().c_str(), _base);
     // CASTER::Init(_caster_core_setting.dump().c_str(), _base);
     // CASTER::Clear();
 
@@ -122,7 +122,7 @@ int ntrip_caster::compontent_stop()
     _compat_listener->stop();
     delete _compat_listener;
 
-    CASTER2::Free();
+    CASTER::Free();
     return 0;
 }
 
