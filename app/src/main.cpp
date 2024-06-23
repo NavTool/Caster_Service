@@ -26,7 +26,7 @@ using json = nlohmann::json;
 // GCC 编译器相关的代码
 #elif defined(_MSC_VER)
 // Visual Studio 编译器相关的代码
-#define YAML_CPP_STATIC_DEFINE
+// #define YAML_CPP_STATIC_DEFINE
 #include <direct.h> // 包含 _chdir 函数的头文件
 #elif defined(__clang__)
 // Clang 编译器相关的代码
