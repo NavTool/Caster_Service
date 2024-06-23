@@ -110,14 +110,12 @@ jobs:
 
     - name: Get tag version
       id: tag_version
-      run: |
-        TAG=$(git describe --tags --dirty=-dev)
-        echo "latest_tag=$TAG" >> $GITHUB_ENV
+      run: echo "::set-output name=tag_version::$(git describe --tags --dirty=-dev)"
 
     - name: Upload Release
       uses: actions/upload-artifact@v4.3.3
       with:
         # 上传后文件的名称
-        name: Caster_Service-${{ env.latest_tag }}-${{ matrix.os }}-${{ matrix.c_compiler }}
+        name: Caster_Service-${{ steps.tag_version.outputs.tag_version }}-${{ matrix.os }}-${{ matrix.c_compiler }}
         # 上传文件的路径
         path: ${{github.workspace}}/bin/
