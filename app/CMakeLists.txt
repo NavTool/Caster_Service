@@ -158,9 +158,9 @@ target_link_libraries(${EXE_NAME} castercore)
 target_link_libraries(${EXE_NAME} authverify)
 
 #libevent 
-target_link_libraries(${EXE_NAME} event)
-target_link_libraries(${EXE_NAME} event_core)
-target_link_libraries(${EXE_NAME} event_extra)
+target_link_libraries(${EXE_NAME} event_static)
+target_link_libraries(${EXE_NAME} event_core_static)
+target_link_libraries(${EXE_NAME} event_extra_static)
 
 #nlohmann/json
 include_directories(${EXE_NAME} ${JSON_INCLUDE_PATH})
