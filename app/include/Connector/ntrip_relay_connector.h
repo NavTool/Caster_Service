@@ -34,10 +34,10 @@ public:
     ntrip_relay_connector(event_base *base, std::unordered_map<std::string, bufferevent *> *connect_map);
     ~ntrip_relay_connector();
 
-    std::string create_new_connection(json con_info);
-
     int start();
     int stop();
+
+    std::string create_new_connection(json con_info);
 
     static void EventCallback(struct bufferevent *bev, short events, void *arg);
     static void ReadCallback(struct bufferevent *bev, void *arg);
@@ -49,6 +49,5 @@ public:
     int request_give_back_account(std::string Conncet_Key);
 
 private:
-    // 更新redis记录
-    int redis_Info_Record(json req);
+
 };
