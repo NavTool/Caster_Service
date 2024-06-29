@@ -98,8 +98,9 @@ std::string ntrip_relay_connector::create_new_connection(json con_info)
 void ntrip_relay_connector::EventCallback(bufferevent *bev, short events, void *ctx)
 {
     auto arg = static_cast<std::pair<ntrip_relay_connector *, std::string> *>(ctx);
-    auto svr = arg->first;
-    auto key = arg->second;
+
+    ntrip_relay_connector *svr = arg->first;
+    std::string key = arg->second;
     // 如果是连接建立成功，发送验证消息
     // 连接建立成功
     if (events == BEV_EVENT_CONNECTED)
@@ -119,11 +120,10 @@ void ntrip_relay_connector::EventCallback(bufferevent *bev, short events, void *
 
     bufferevent_free(bev);
 
+    delete arg;
     svr->request_give_back_account(key);
 
     //  如果是连接建立失败，关闭连接，移除
-
-    delete arg;
 }
 
 void ntrip_relay_connector::ReadCallback(bufferevent *bev, void *ctx)
@@ -266,3 +266,8 @@ int ntrip_relay_connector::request_give_back_account(std::string Conncet_Key)
     return 0;
 }
 
+int ntrip_relay_connector::redis_Info_Record(json req)
+{
+
+    return 0;
+}
