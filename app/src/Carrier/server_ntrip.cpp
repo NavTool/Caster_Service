@@ -264,13 +264,16 @@ void server_ntrip::Auth_Login_Callback(const char *request, void *arg, AuthReply
 void server_ntrip::Caster_Register_Callback(const char *request, void *arg, CatserReply *reply)
 {
     auto svr = static_cast<server_ntrip *>(arg);
-    if (reply->type == AUTH_REPLY_OK)
+    if (reply->type == CASTER_REPLY_OK)
     {
         svr->runing();
     }
-    else
+    else if (reply->type == CASTER_REPLY_ERR)
     {
         spdlog::info("[{}:{}]: CASTER_REPLY_ERROR:[{}], user [{}] , using mount [{}], addr:[{}:{}]", __class__, __func__, reply->str, svr->_user_name, svr->_mount_point, svr->_ip, svr->_port);
         svr->stop();
+    }
+    else
+    {
     }
 }
