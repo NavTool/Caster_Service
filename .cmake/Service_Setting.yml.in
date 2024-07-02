@@ -6,8 +6,8 @@ Ntrip_Listener_Setting:
   Listen_Port: 4202     #监听的端口
   Connect_Timeout: 30   #连接无响应超时时间（建立了TCP连接但是并不发送验证信息）（/秒）（≤0 ：关闭） 
   Header_No_CRLF: true  #兼容模式，允许用户仅发送Header头登录，且不必发送回车换行，但是同时由于没有回车换行，也不能携带除挂载点之外的任何信息
-  Enable_Nearest:false  #最近挂载点模式，启动之后，指定的挂载点名会被识别为Nearest登录策略
-  Nearest_List:NEAREST  #被识别为Nearest策略的登录挂载点
+  Enable_Nearest: false  #最近挂载点模式，启动之后，指定的挂载点名会被识别为Nearest登录策略
+  Nearest_List: NEAREST  #被识别为Nearest策略的登录挂载点
 
 #基站相关设置
 Server_Setting:                
@@ -28,8 +28,8 @@ Client_Setting:
 # #源列表设置
 # Source_Setting:
 #   Connect_Timeout: 30         #超时时间（源列表请求超过指定事件还没有发送完毕，也直接关闭请求）（/秒）（≤0 ：关闭）
-#   Enable_Common_MPT:true      #播发所有在线的挂载点
-#   Enabel_Virtual_MPT:true     #播发虚拟的挂载点
+#   Enable_Common_MPT: true      #播发所有在线的挂载点
+#   Enabel_Virtual_MPT: true     #播发虚拟的挂载点
 #   Virtual_MPT_List: NEAREST          #额外播发的挂载点列表
 
 #通用设置

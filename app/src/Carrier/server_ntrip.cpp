@@ -250,30 +250,49 @@ int server_ntrip::publish_data_from_evbuf()
 void server_ntrip::Auth_Login_Callback(const char *request, void *arg, AuthReply *reply)
 {
     auto svr = static_cast<server_ntrip *>(arg);
-    if (reply->type == AUTH_REPLY_OK)
+    // if (reply->type == AUTH_REPLY_OK)
+    // {
+    //     CASTER::Register_Base_Record(svr->_mount_point.c_str(), svr->_connect_key.c_str(), Caster_Register_Callback, svr);
+    // }
+    // else
+    // {
+    //     spdlog::info("[{}]: AUTH_REPLY_ERROR user [{}] , using mount [{}], addr:[{}:{}]", __class__, svr->_user_name, svr->_mount_point, svr->_ip, svr->_port);
+    //     svr->stop();
+    // }
+
+    switch (reply->type)
     {
+    case AUTH_REPLY_OK:
         CASTER::Register_Base_Record(svr->_mount_point.c_str(), svr->_connect_key.c_str(), Caster_Register_Callback, svr);
-    }
-    else
-    {
+        break;
+    case AUTH_REPLY_ERR:
         spdlog::info("[{}]: AUTH_REPLY_ERROR user [{}] , using mount [{}], addr:[{}:{}]", __class__, svr->_user_name, svr->_mount_point, svr->_ip, svr->_port);
         svr->stop();
+        break;
+    default:
+        break;
     }
 }
 
 void server_ntrip::Caster_Register_Callback(const char *request, void *arg, CatserReply *reply)
 {
     auto svr = static_cast<server_ntrip *>(arg);
-    if (reply->type == CASTER_REPLY_OK)
+    switch (reply->type)
     {
+    case CASTER_REPLY_OK:
         svr->runing();
-    }
-    else if (reply->type == CASTER_REPLY_ERR)
-    {
+        break;
+    case CASTER_REPLY_ERR:
         spdlog::info("[{}:{}]: CASTER_REPLY_ERROR:[{}], user [{}] , using mount [{}], addr:[{}:{}]", __class__, __func__, reply->str, svr->_user_name, svr->_mount_point, svr->_ip, svr->_port);
         svr->stop();
-    }
-    else
-    {
+        break;
+    case CASTER_REPLY_ACTIVE:
+        spdlog::info("[{}:{}]: CASTER_REPLY_ACTIVE:[{}], user [{}] , using mount [{}], addr:[{}:{}]", __class__, __func__, reply->str, svr->_user_name, svr->_mount_point, svr->_ip, svr->_port);
+        break;
+    case CASTER_REPLY_INACTIVE:
+        spdlog::info("[{}:{}]: CASTER_REPLY_INACTIVE:[{}], user [{}] , using mount [{}], addr:[{}:{}]", __class__, __func__, reply->str, svr->_user_name, svr->_mount_point, svr->_ip, svr->_port);
+        break;
+    default:
+        break;
     }
 }
