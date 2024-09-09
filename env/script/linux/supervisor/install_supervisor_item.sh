@@ -48,17 +48,20 @@ fi
 # 创建或覆盖 Supervisor 配置文件
 cat <<EOL > $CONFIG_FILE
 [program:$SUPERVISOR_NAME]
-command=$COMMAND         ; 守护进程的命令路径
-directory=$EXECUTABLE_DIR    ;
+command=$COMMAND
+directory=$EXECUTABLE_DIR
 startsecs=3
 startretries=3
-autostart=true           ; 启动时自动运行
-autorestart=true         ; 进程退出时自动重启
-stderr_logfile=$EXECUTABLE_DIR/KORO_CASTER.err.log  ; 错误日志文件路径
-stdout_logfile=$EXECUTABLE_DIR/KORO_CASTER.out.log  ; 标准输出日志文件路径
+autostart=true
+autorestart=true 
+stderr_logfile=$EXECUTABLE_DIR/KORO_CASTER.err.log
+stdout_logfile=$EXECUTABLE_DIR/KORO_CASTER.out.log
 stderr_logfile_maxbytes=2MB
 stdout_logfile_maxbytes=2MB
-user=$USER             ; 指定运行用户
+user=ubuntu
+
+
+environment=ULIMIT_NOFILE="65535"
 
 EOL
 
@@ -72,23 +75,10 @@ sudo supervisorctl update
 
 # 提示如何启动和关闭服务
 echo "服务管理提示："
-echo "要启动服务，请运行：sudo supervisorctl start CASTER_SERVICE"
-echo "要停止服务，请运行：sudo supervisorctl stop CASTER_SERVICE"
+echo "要启动服务,请运行:sudo supervisorctl start CASTER_SERVICE"
+echo "要停止服务,请运行:sudo supervisorctl stop CASTER_SERVICE"
 
 
 
-# CASTER_SERVICE.conf
-# [program:KORO_CASTER]
-# command=/home/ubuntu/SoftWare_SinoCors/CDC_NtripCenter/Koro_Caster_Service/stable/Koro_Caster_Service
-# directory=/home/ubuntu/SoftWare_SinoCors/CDC_NtripCenter/Koro_Caster_Service/stable/
-# autorestart=true
-# startsecs=3
-# startretries=3
-# stdout_logfile=/home/ubuntu/SoftWare_SinoCors/CDC_NtripCenter/Koro_Caster_Service/stable/KORO_CASTER.out.log
-# stderr_logfile=/home/ubuntu/SoftWare_SinoCors/CDC_NtripCenter/Koro_Caster_Service/stable/KORO_CASTER.err.log
-# stdout_logfile_maxbytes=2MB
-# stderr_logfile_maxbytes=2MB
-# user=ubuntu
-# priority=999
-# numprocs=1
+
 
