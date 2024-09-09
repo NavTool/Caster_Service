@@ -90,8 +90,6 @@ jobs:
       run: |
         cd ${{github.workspace}}/env/redis-7.2.1 && make MALLOC=libc
         cp ${{github.workspace}}/env/redis-7.2.1/src/redis-server ${{github.workspace}}/bin/env
-        cp ${{github.workspace}}/env/start-redis.sh ${{github.workspace}}/bin/env
-        cp ${{github.workspace}}/env/stop-redis.sh ${{github.workspace}}/bin/env
       shell: bash
 
     - name: Build Env for Windows
@@ -99,7 +97,7 @@ jobs:
       run: |
         move ${{github.workspace}}\bin\${{env.BUILD_TYPE}}\* ${{github.workspace}}\bin\
         rmdir ${{github.workspace}}\bin\${{env.BUILD_TYPE}}
-        xcopy /S /E /I ${{github.workspace}}\env\Redis-7.0.15-Windows-x64\ ${{github.workspace}}\bin\env\   
+        xcopy /S /E /I ${{github.workspace}}\env\Redis-7.4.0-Windows-x64-msys2\ ${{github.workspace}}\bin\env\   
       shell: cmd
 
  
