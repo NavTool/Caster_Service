@@ -147,7 +147,7 @@ set_target_properties(${EXE_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_S
 configure_file(${CMAKE_SOURCE_DIR}/.cmake/Auth_Verify.yml.in ${CMAKE_SOURCE_DIR}/bin/conf/Auth_Verify.yml @ONLY)
 configure_file(${CMAKE_SOURCE_DIR}/.cmake/Caster_Core.yml.in ${CMAKE_SOURCE_DIR}/bin/conf/Caster_Core.yml @ONLY)
 configure_file(${CMAKE_SOURCE_DIR}/.cmake/Service_Setting.yml.in ${CMAKE_SOURCE_DIR}/bin/conf/Service_Setting.yml @ONLY)
-configure_file(${CMAKE_SOURCE_DIR}/.cmake/redis.conf.in ${CMAKE_SOURCE_DIR}/bin/env/redis.conf @ONLY)
+# configure_file(${CMAKE_SOURCE_DIR}/.cmake/redis.conf.in ${CMAKE_SOURCE_DIR}/bin/env/redis.conf @ONLY)
 
 message(STATUS "BINARY_DIR : ${CMAKE_SOURCE_DIR}/bin")
 #Koro_NavTool
