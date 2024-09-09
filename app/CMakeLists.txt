@@ -63,15 +63,13 @@ endif()
 # 设置项目的版本号
 set(PROJECT_VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}.${VERSION_EXTRA}")
 
-set(EXE_NAME "${PROJECT_NAME}-${PROJECT_VERSION}")
-
 message(STATUS "")
 message(STATUS "------- ${PROJECT_NAME} -------")
 
 message(STATUS "DEV VERSION: ${PROJECT_VERSION}")
 message(STATUS "GIT VERSION: ${PROJECT_GIT_VERSION}")
 message(STATUS "TAG VERSION: ${PROJECT_TAG_VERSION}")
-message(STATUS "BINARY_NAME: ${EXE_NAME}")
+message(STATUS "BINARY_NAME: ${PROJECT_NAME}-${PROJECT_VERSION}")
 
 #版本14以下可能会导致abseil不支持
 set(CMAKE_CXX_STANDARD 20)
@@ -79,14 +77,14 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 
 #包含的源文件和头文件
-include_directories(${EXE_NAME} ${CMAKE_CURRENT_LIST_DIR}/include)
-include_directories(${EXE_NAME} ${CMAKE_CURRENT_LIST_DIR}/include/Carrier)
-include_directories(${EXE_NAME} ${CMAKE_CURRENT_LIST_DIR}/include/Compontent)
-include_directories(${EXE_NAME} ${CMAKE_CURRENT_LIST_DIR}/include/Connector)
-include_directories(${EXE_NAME} ${CMAKE_CURRENT_LIST_DIR}/include/DB)
-include_directories(${EXE_NAME} ${CMAKE_CURRENT_LIST_DIR}/include/Extra)
+include_directories(${PROJECT_NAME} ${CMAKE_CURRENT_LIST_DIR}/include)
+include_directories(${PROJECT_NAME} ${CMAKE_CURRENT_LIST_DIR}/include/Carrier)
+include_directories(${PROJECT_NAME} ${CMAKE_CURRENT_LIST_DIR}/include/Compontent)
+include_directories(${PROJECT_NAME} ${CMAKE_CURRENT_LIST_DIR}/include/Connector)
+include_directories(${PROJECT_NAME} ${CMAKE_CURRENT_LIST_DIR}/include/DB)
+include_directories(${PROJECT_NAME} ${CMAKE_CURRENT_LIST_DIR}/include/Extra)
 
-include_directories(${EXE_NAME} ${CMAKE_CURRENT_LIST_DIR}/src)
+include_directories(${PROJECT_NAME} ${CMAKE_CURRENT_LIST_DIR}/src)
 
  set(DB_TABLE_SOURCE
     include/DB/relay_account_tb.h
@@ -127,7 +125,7 @@ set(MAIN_SOURCES
     src/ntrip_caster.cpp
 )
 
-add_executable(${EXE_NAME} 
+add_executable(${PROJECT_NAME} 
                 ${MAIN_SOURCES} 
                 ${CARRIER_TYPE_SOURCE}  
                 ${CONNECTOR_TYPE_SOURCE}
@@ -140,10 +138,10 @@ add_executable(${EXE_NAME}
 
 #基于version.h.in 生成 version.h
 configure_file(${CMAKE_SOURCE_DIR}/.cmake/version.h.in version.h @ONLY)
-target_include_directories(${EXE_NAME}  PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
+target_include_directories(${PROJECT_NAME}  PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
 
 #基于工程目录下的配置文件 生成 执行目录下的配置文件
-set_target_properties(${EXE_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin")
+set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin")
 configure_file(${CMAKE_SOURCE_DIR}/.cmake/Auth_Verify.yml.in ${CMAKE_SOURCE_DIR}/bin/conf/Auth_Verify.yml @ONLY)
 configure_file(${CMAKE_SOURCE_DIR}/.cmake/Caster_Core.yml.in ${CMAKE_SOURCE_DIR}/bin/conf/Caster_Core.yml @ONLY)
 configure_file(${CMAKE_SOURCE_DIR}/.cmake/Service_Setting.yml.in ${CMAKE_SOURCE_DIR}/bin/conf/Service_Setting.yml @ONLY)
@@ -151,21 +149,21 @@ configure_file(${CMAKE_SOURCE_DIR}/.cmake/Service_Setting.yml.in ${CMAKE_SOURCE_
 
 message(STATUS "BINARY_DIR : ${CMAKE_SOURCE_DIR}/bin")
 #Koro_NavTool
-target_link_libraries(${EXE_NAME} knt)
+target_link_libraries(${PROJECT_NAME} knt)
 #caster_core
-target_link_libraries(${EXE_NAME} castercore)
+target_link_libraries(${PROJECT_NAME} castercore)
 #auth_verify
-target_link_libraries(${EXE_NAME} authverify)
+target_link_libraries(${PROJECT_NAME} authverify)
 
 #libevent 
-target_link_libraries(${EXE_NAME} event)
-target_link_libraries(${EXE_NAME} event_core)
-target_link_libraries(${EXE_NAME} event_extra)
+target_link_libraries(${PROJECT_NAME} event)
+target_link_libraries(${PROJECT_NAME} event_core)
+target_link_libraries(${PROJECT_NAME} event_extra)
 
 #nlohmann/json
-include_directories(${EXE_NAME} ${JSON_INCLUDE_PATH})
+include_directories(${PROJECT_NAME} ${JSON_INCLUDE_PATH})
 #spdlog
-# target_link_libraries(${EXE_NAME} spdlog)
-include_directories(${EXE_NAME} ${SPDLOG_INCLUDE_PATH})
+# target_link_libraries(${PROJECT_NAME} spdlog)
+include_directories(${PROJECT_NAME} ${SPDLOG_INCLUDE_PATH})
 #yaml
-target_link_libraries(${EXE_NAME} yaml-cpp)
+target_link_libraries(${PROJECT_NAME} yaml-cpp)
