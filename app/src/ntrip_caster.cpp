@@ -14,6 +14,67 @@
 
 #define __class__ "ntrip_caster"
 
+void ntrip_caster::License_Check_Callback(evutil_socket_t fd, short events, void *arg)
+{
+    auto *svr = static_cast<ntrip_caster *>(arg);
+
+    // 许可证是否无效，无效的许可证应用的是试用许可
+    //  检查当前是否已经激活
+    if (!svr->_license_check.active())
+    {
+        // 没有激活，写入一条日志，提示需要激活
+        spdlog::warn("[{}:{}]: This program does not have a valid license, and the service is restricted, Current Online Limit: {} ,Current Online Limit: {}", __class__, __func__, svr->_license_check.client_limit(), svr->_license_check.server_limit());
+    }
+
+    // 检查许可证有效期
+    if (time(0) > svr->_license_check.expiration_time())
+    {
+        // 许可证已经过期
+        spdlog::warn("[{}:{}]: License expired, please replace it with a new valid license, program will reject all connections", __class__, __func__);
+        svr->_compat_listener->disable_accept_new_connect();
+        return;
+    }
+
+    // 检查是否超限
+    //  检查当前用户和基站数量是否超限
+    if (svr->_client_map.size() > svr->_license_check.client_limit() || svr->_server_map.size() > svr->_license_check.server_limit())
+    {
+        spdlog::warn("[{}:{}]: The number of connections exceeds the license limit, Current Online Limit: {},Current Online Limit: {}", __class__, __func__, svr->_license_check.client_limit(), svr->_license_check.server_limit());
+        svr->_compat_listener->disable_accept_new_connect();
+        return;
+    }
+
+    svr->_compat_listener->enable_accept_new_connect();
+}
+
+int ntrip_caster::init_license_check()
+{
+    _license_check.gen_register_file();
+    _license_check.load_license_file();
+
+    if (_license_check.active())
+    {
+        spdlog::info("[{}:{}]:License has been verified, Current Online Limit: {} ,Current Online Limit: {}", __class__, __func__, _license_check.client_limit(), _license_check.server_limit());
+    }
+    else
+    {
+        spdlog::warn("[{}:{}]:License is not vaild, Current Online Limit: {} ,Current Online Limit: {}", __class__, __func__, _license_check.client_limit(), _license_check.server_limit());
+    }
+
+    if (time(0) > _license_check.expiration_time())
+    {
+        spdlog::warn("[{}:{}]: License expired, please replace it with a new valid license, program will reject all connections", __class__, __func__);
+        _compat_listener->disable_accept_new_connect();
+    }
+
+    _license_check_tv.tv_sec = 30;
+    _license_check_tv.tv_usec = 0;
+    _license_check_ev = event_new(_base, -1, EV_PERSIST, License_Check_Callback, this);
+    // 添加超时事件
+    event_add(_license_check_ev, &_license_check_tv);
+    return 0;
+}
+
 ntrip_caster::ntrip_caster(json cfg)
 {
     std::string dump_conf = cfg.dump(4);
@@ -30,6 +91,7 @@ ntrip_caster::ntrip_caster(json cfg)
     _server_setting = _service_setting["Server_Setting"];
 
     _timeout_intv = _common_setting["Timeout_Intv"];
+
     _output_state = _common_setting["Output_State"];
 
     _base = event_base_new();
@@ -48,6 +110,10 @@ int ntrip_caster::start()
 {
     // 核心模块初始化（核心业务）
     compontent_init();
+
+    // 附加模块初始化
+    extra_init();
+
     // 添加超时事件
     event_add(_timeout_ev, &_timeout_tv);
     // 启动event_base处理线程
@@ -93,6 +159,8 @@ int ntrip_caster::periodic_task()
     malloc_trim(0); // 尝试归还、释放内存
 #endif
 
+    // 检测是否激活
+
     return 0;
 }
 
@@ -123,6 +191,18 @@ int ntrip_caster::compontent_stop()
     delete _compat_listener;
 
     CASTER::Free();
+    return 0;
+}
+
+int ntrip_caster::extra_init()
+{
+    init_license_check();
+
+    return 0;
+}
+
+int ntrip_caster::extra_stop()
+{
     return 0;
 }
 

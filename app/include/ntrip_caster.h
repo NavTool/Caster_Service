@@ -10,6 +10,7 @@
 #include "Carrier/source_ntrip.h"
 #include "DB/relay_account_tb.h"
 #include "Extra/heart_beat.h"
+#include "Extra/license_check.h"
 
 #include <event2/util.h>
 #include <event2/event.h>
@@ -47,6 +48,17 @@ private:
     int _timeout_intv;
 
 public:
+    bool _license_checked = true;
+    license_check _license_check;
+
+    event *_license_check_ev;
+    timeval _license_check_tv;
+
+    int init_license_check();
+    static void License_Check_Callback(evutil_socket_t fd, short events, void *arg); // 许可检查的函数
+                                                                                     // 初始化许可检查
+
+public:
     // 公开的接口
     ntrip_caster(json cfg);
     ~ntrip_caster();
@@ -66,6 +78,9 @@ private:
     // 程序启动和停止
     int compontent_init();
     int compontent_stop();
+
+    int extra_init();
+    int extra_stop();
 
 private:
     // 任务处理函数

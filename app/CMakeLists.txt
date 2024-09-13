@@ -114,8 +114,13 @@ set(CONNECTOR_TYPE_SOURCE
 )
 
 set(EXTRA_SOURCE
-    include/Extra/heart_beat.h
-    src/Extra/heart_beat.cpp
+    # include/Extra/heart_beat.h
+    # src/Extra/heart_beat.cpp
+    include/Extra/license_check.h
+    src/Extra/license_check.cpp
+    src/Extra/license_check.cpp
+    src/Extra/register.h
+    src/Extra/register.cpp
 )
 
 set(MAIN_SOURCES
@@ -131,7 +136,7 @@ add_executable(${PROJECT_NAME}
                 ${CONNECTOR_TYPE_SOURCE}
                 ${COMPONTENT_TYPE_SOURCE}    
                 ${DB_TABLE_SOURCE} 
-                #${EXTRA_SOURCE}
+                ${EXTRA_SOURCE}
                 ${VERSION_SOURCES})
 
 #生成的可执行文件名称和包含的文件
@@ -148,6 +153,10 @@ configure_file(${CMAKE_SOURCE_DIR}/.cmake/Service_Setting.yml.in ${CMAKE_SOURCE_
 # configure_file(${CMAKE_SOURCE_DIR}/.cmake/redis.conf.in ${CMAKE_SOURCE_DIR}/bin/env/redis.conf @ONLY)
 
 message(STATUS "BINARY_DIR : ${CMAKE_SOURCE_DIR}/bin")
+
+
+# target_link_libraries(${PROJECT_NAME} openssl)
+
 #Koro_NavTool
 target_link_libraries(${PROJECT_NAME} knt)
 #caster_core

@@ -1,0 +1,9 @@
+# 使用指定的基础镜像
+ARG BASE_IMAGE=centos
+
+FROM ${BASE_IMAGE}
+
+# 安装必要的软件和工具
+RUN dnf update -y && dnf install gcc g++ make cmake -y 
+
+CMD ["tail", "-f", "/dev/null"]

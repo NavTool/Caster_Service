@@ -51,5 +51,9 @@ Debug_Mode:
   Core_Dump: true      #生成Core_Dump文件
   Output_Debug: false   #输出Debug信息到日志（会向控制台/日志输出Debug级别的信息）
 
+#注册设置
+Register_Info:
+  Register_Flie_Path: default
+  License_Flie_Path: default
 
 

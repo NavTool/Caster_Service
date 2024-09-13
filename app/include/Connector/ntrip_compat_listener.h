@@ -49,6 +49,8 @@ private:
     int _connect_timeout = 0;
     bool _enable_no_CRLF = true;
 
+    bool _disable_new_connect = false;
+
     event_base *_base;
     evconnlistener *_listener;
 
@@ -63,6 +65,9 @@ public:
 
     int start();
     int stop();
+
+    int disable_accept_new_connect(); // 停止接收新的连接
+    int enable_accept_new_connect();  // 启动接收新的连接
 
 public:
     // 新建连接相关
@@ -89,5 +94,5 @@ private:
     std::string decode_basic_authentication(std::string authentication);
     int erase_and_free_bev(bufferevent *bev, std::string Connect_Key);
 
-    bool check_mount_is_valid(const std::string& str);
+    bool check_mount_is_valid(const std::string &str);
 };

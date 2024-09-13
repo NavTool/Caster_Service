@@ -12,7 +12,7 @@ ntrip_compat_listener::ntrip_compat_listener(json conf, event_base *base, std::u
 {
     _listen_port = conf["Port"];
     _connect_timeout = conf["Timeout"];
-    _enable_no_CRLF=conf["Enable_No_CRLF"];
+    _enable_no_CRLF = conf["Enable_No_CRLF"];
 
     _base = base;
     _connect_map = connect_map;
@@ -51,13 +51,33 @@ int ntrip_compat_listener::stop()
     return 0;
 }
 
+int ntrip_compat_listener::disable_accept_new_connect()
+{
+    _disable_new_connect = true;
+    return 0;
+}
+
+int ntrip_compat_listener::enable_accept_new_connect()
+{
+    _disable_new_connect = false;
+    return 0;
+}
+
 void ntrip_compat_listener::AcceptCallback(evconnlistener *listener, evutil_socket_t fd, sockaddr *address, int socklen, void *arg)
 {
     auto svr = static_cast<ntrip_compat_listener *>(arg);
     event_base *base = svr->_base;
-
     std::string ip = util_get_user_ip(fd);
     int port = util_get_user_port(fd);
+
+    if (svr->_disable_new_connect)
+    {
+        // 关闭套接字
+        spdlog::warn("[{}]: don't allow new connect, close new connect, addr:[{}:{}]", __class__, ip, port); // 如果ip和port为空，则连接已经挂了，fd解析不出来
+        evutil_closesocket(fd);
+        return;
+    }
+
     spdlog::info("[{}]: receive new connect, addr:[{}:{}]", __class__, ip, port); // 如果ip和port为空，则连接已经挂了，fd解析不出来
 
     std::string Connect_Key = util_cal_connect_key(fd);

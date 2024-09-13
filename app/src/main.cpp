@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <memory>
-#include <coroutine>
+// #include <coroutine>
 
 #ifdef WIN32
 
@@ -297,6 +297,10 @@ int main(int argc, char **argv)
     spdlog::info("Init Server...");
 
     ntrip_caster a(cfg); // 创建一个对象，传入config
+
+    // auto str1 = a._license_check.gen_register_file();
+    // a._license_check.load_license_file();
+    // a._license_check.fresh_license_file();
 
     spdlog::info("Start Server...");
     a.start(); // 原神，启动！
