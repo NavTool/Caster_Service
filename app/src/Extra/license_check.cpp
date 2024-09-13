@@ -1,10 +1,18 @@
 #include "license_check.h"
 #include "register.h"
 
-#include <cstring>
+#ifdef WIN32
+#include <iphlpapi.h>
+#include <windows.h>
+#include <vector>
+#pragma comment(lib, "iphlpapi.lib")
+#else
 #include <ifaddrs.h>
 #include <net/if.h>
 #include <netpacket/packet.h>
+#endif
+
+#include <cstring>
 #include <iomanip>
 #include <cstdint>
 #include <ctime>   // 包含 std::tm 和 std::mktime
@@ -128,9 +136,30 @@ int license_check::enable_license_check(event_base *base)
 }
 
 // 获取网卡的MAC地址
+#ifdef WIN32
 std::string license_check::getMacAddress(const std::string &interfaceName)
 {
+    ULONG bufferSize = 0;
+    GetAdaptersInfo(nullptr, &bufferSize); // 获取所需的缓冲区大小
 
+    std::vector<BYTE> buffer(bufferSize);
+    IP_ADAPTER_INFO *adapterInfo = reinterpret_cast<IP_ADAPTER_INFO *>(buffer.data());
+
+    if (GetAdaptersInfo(adapterInfo, &bufferSize) == ERROR_SUCCESS)
+    {
+        char macStr[18];
+        std::snprintf(macStr, sizeof(macStr), "%02X:%02X:%02X:%02X:%02X:%02X",
+                      adapterInfo->Address[0], adapterInfo->Address[1], adapterInfo->Address[2],
+                      adapterInfo->Address[3], adapterInfo->Address[4], adapterInfo->Address[5]);
+        return std::string(macStr);
+    }
+
+    // std::cerr << "Adapter not found or failed to retrieve MAC address." << std::endl;
+    return std::string();
+}
+#else
+std::string license_check::getMacAddress(const std::string &interfaceName)
+{
     struct ifaddrs *ifaddr, *ifa;
     char mac_address[18] = {0}; // 用于存储MAC地址的缓冲区
 
@@ -161,3 +190,4 @@ std::string license_check::getMacAddress(const std::string &interfaceName)
     freeifaddrs(ifaddr); // 释放地址结构
     return std::string(mac_address);
 }
+#endif

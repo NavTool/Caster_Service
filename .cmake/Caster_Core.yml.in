@@ -1,4 +1,5 @@
 # Caster_Core 配置
+# 适用版本：@PROJECT_VERSION@
 
 Caster_Setting:
   Update_Intv: 1          #内部数据更新频率
