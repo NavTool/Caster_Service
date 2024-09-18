@@ -199,22 +199,22 @@ void client_ntrip::Auth_Login_Callback(const char *request, void *arg, AuthReply
     // }
 }
 
-void client_ntrip::Caster_Register_Callback(const char *request, void *arg, CatserReply *reply)
+void client_ntrip::Caster_Register_Callback(const char *request, void *arg, catser_reply *reply)
 {
     auto svr = static_cast<client_ntrip *>(arg);
     switch (reply->type)
     {
-    case CASTER_REPLY_OK:
+    case CasterReply::OK:
         svr->runing();
         break;
-    case CASTER_REPLY_ERR:
+    case CasterReply::ERR:
         spdlog::info("[{}:{}]: CASTER_REPLY_ERROR:[{}], user [{}] , using mount [{}], addr:[{}:{}]", __class__, __func__, reply->str, svr->_user_name, svr->_mount_point, svr->_ip, svr->_port);
         svr->stop();
         break;
-    case CASTER_REPLY_ACTIVE:
+    case CasterReply::ACTIVE:
         spdlog::info("[{}:{}]: CASTER_REPLY_ACTIVE:[{}], user [{}] , using mount [{}], addr:[{}:{}]", __class__, __func__, reply->str, svr->_user_name, svr->_mount_point, svr->_ip, svr->_port);
         break;
-    case CASTER_REPLY_INACTIVE:
+    case CasterReply::INACTIVE:
         spdlog::info("[{}:{}]: CASTER_REPLY_INACTIVE:[{}], user [{}] , using mount [{}], addr:[{}:{}]", __class__, __func__, reply->str, svr->_user_name, svr->_mount_point, svr->_ip, svr->_port);
         break;
     default:
@@ -222,21 +222,21 @@ void client_ntrip::Caster_Register_Callback(const char *request, void *arg, Cats
     }
 }
 
-void client_ntrip::Caster_Sub_Callback(const char *request, void *arg, CatserReply *reply)
+void client_ntrip::Caster_Sub_Callback(const char *request, void *arg, catser_reply *reply)
 {
     auto svr = static_cast<client_ntrip *>(arg);
 
-    if (reply->type == CASTER_REPLY_STRING)
+    if (reply->type == CasterReply::STRING)
     {
         svr->transfer_sub_raw_data(reply->str, reply->len);
     }
-    else if (reply->type == CASTER_REPLY_OK)
+    else if (reply->type == CasterReply::OK)
     {
         spdlog::info("[{}]: user [{}] is login, using mount [{}], addr:[{}:{}]", __class__, svr->_user_name, svr->_mount_point, svr->_ip, svr->_port);
 
         svr->bev_send_reply();
     }
-    else if (reply->type == CASTER_REPLY_ERR)
+    else if (reply->type == CasterReply::ERR)
     {
         spdlog::info("[{}:{}]: CASTER_REPLY_ERR:[{}], user [{}] , using mount [{}], addr:[{}:{}]", __class__, __func__, reply->str, svr->_user_name, svr->_mount_point, svr->_ip, svr->_port);
         svr->stop();
