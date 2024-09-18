@@ -294,6 +294,10 @@ int main(int argc, char **argv)
     }
 #endif
 
+    // auto x = new ntrip_caster(cfg);
+    // delete x;
+    // x->start();
+
     spdlog::info("Init Server...");
 
     ntrip_caster a(cfg); // 创建一个对象，传入config

@@ -350,7 +350,7 @@ int ntrip_caster::create_server_ntrip(json req)
     if (con == _connect_map.end())
     {
         spdlog::warn("[{}:{}]: Create_Ntrip_Server fail, con not in connect_map", __class__, __func__);
-        throw 2; // 找不到连接
+        return 1; // 找不到连接
     }
     req["Settings"] = _server_setting;
     server_ntrip *ntrips = new server_ntrip(req, con->second);
