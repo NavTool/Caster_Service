@@ -63,6 +63,9 @@ std::time_t convertStringToUTCSeconds(const std::string &dateStr)
 
 license_check::license_check(/* args */)
 {
+    _client_limit = 10;
+    _server_limit = 10;
+    _expiration_time = 9999999999;
 }
 
 license_check::~license_check()

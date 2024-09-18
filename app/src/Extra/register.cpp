@@ -1649,7 +1649,6 @@ bool CRegister::SerialRegester(std::string register_info, std::string license_co
 
     try
     {
-
         int serialSize = license_code.size();
         if (serialSize != 32)
             return false;
@@ -1761,6 +1760,11 @@ bool CRegister::SerialRegester(std::string register_info, std::string license_co
     catch (const std::exception &e)
     {
         // std::cerr << e.what() << "error \n";
+
+        m_server_limit = 10;
+        m_client_limit = 10;
+        m_endTime = "2099-12-31";
+
         return false;
     }
 
