@@ -198,7 +198,7 @@ int ntrip_caster::compontent_stop()
 
 int ntrip_caster::extra_init()
 {
-     init_license_check();
+    init_license_check();
 
     return 0;
 }
@@ -254,7 +254,7 @@ int ntrip_caster::create_source_ntrip(json req)
     auto con = _connect_map.find(connect_key);
     if (con == _connect_map.end())
     {
-        spdlog::warn("[{}:{}]: Create Source_Ntrip fail, con not in connect_map", __class__, __func__);
+        spdlog::warn("[{}:{}]: Create Source_Ntrip fail, con not in connect_map,connect_key: {}", __class__, __func__, connect_key);
         return 1;
     }
 
