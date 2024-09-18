@@ -198,7 +198,7 @@ int ntrip_caster::compontent_stop()
 
 int ntrip_caster::extra_init()
 {
-    init_license_check();
+     init_license_check();
 
     return 0;
 }

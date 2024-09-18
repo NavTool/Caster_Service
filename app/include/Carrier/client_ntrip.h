@@ -57,6 +57,6 @@ private:
     static void EventCallback(struct bufferevent *bev, short events, void *arg);
 
     static void Auth_Login_Callback(const char *request, void *arg, AuthReply *reply);
-    static void Caster_Register_Callback(const char *request, void *arg, CatserReply *reply);
-    static void Caster_Sub_Callback(const char *request, void *arg, CatserReply *reply);
+    static void Caster_Register_Callback(const char *request, void *arg, catser_reply *reply);
+    static void Caster_Sub_Callback(const char *request, void *arg, catser_reply *reply);
 };
