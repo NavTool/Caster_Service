@@ -18,6 +18,6 @@ Source_Setting:
 # Redis连接
 Reids_Connect_Setting:
   IP: 127.0.0.1           #如果是docker-compse启动  IP直接设置为redis
-  Port: 6379
+  Port: 16379
   Requirepass: password
 

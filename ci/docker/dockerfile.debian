@@ -4,6 +4,6 @@ ARG BASE_IMAGE=ubuntu
 FROM ${BASE_IMAGE}
 
 # 安装必要的软件和工具
-RUN apt-get update && apt-get install gcc g++ make cmake -y 
+RUN apt-get update && apt-get install gcc g++ make cmake git -y 
 
 CMD ["tail", "-f", "/dev/null"]

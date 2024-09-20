@@ -104,6 +104,10 @@ set(CARRIER_TYPE_SOURCE
     # src/Carrier/server_relay.cpp
     include/Carrier/source_ntrip.h
     src/Carrier/source_ntrip.cpp
+    include/Carrier/server_grid.h
+    src/Carrier/server_grid.cpp
+    include/Carrier/client_grid.h
+    src/Carrier/client_grid.cpp
 )
 
 set(CONNECTOR_TYPE_SOURCE
