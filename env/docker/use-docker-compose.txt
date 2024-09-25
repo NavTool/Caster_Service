@@ -1,0 +1,29 @@
+安装docker
+
+yum install docker
+
+安装docker compose
+
+yum install docker-compose
+
+
+启动docker
+
+systemctl start docker
+systemctl enable docker
+
+
+导入镜像
+
+docker load -i   xxxxx.tar
+
+
+在docker-compose工作目录下启动
+docker compose up -d        -d是后台运行
+
+
+docker compose ps
+
+
+
+
