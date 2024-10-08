@@ -12,7 +12,7 @@ server_ntrip::server_ntrip(json req, bufferevent *bev)
     _ip = util_get_user_ip(fd);
     _port = util_get_user_port(fd);
 
-    if (req["ntrip_version"] == "Ntrip/2.0")
+    if (_info["ntrip_version"] == "Ntrip/2.0")
     {
         _NtripVersion2 = true;
         _transfer_with_chunked = true;
@@ -21,14 +21,14 @@ server_ntrip::server_ntrip(json req, bufferevent *bev)
     _send_evbuf = evbuffer_new();
     _recv_evbuf = evbuffer_new();
 
-    _user_name = req["user_name"];
+    _user_name = _info["user_name"];
     _connect_key = _info["connect_key"];
     _mount_point = _info["mount_point"];
 
-    _connect_timeout = _conf["Timeout"];
-    _heart_beat_interval = _conf["Heartbeat_Intv"];
-    _heart_beat_msg = _conf["Heartbeat_Msg"];
-    _unsend_limit = _conf["Unsend_Limit"];
+    _connect_timeout = _conf["Connect_Timeout"];
+    _unsend_byte_limit = _conf["Unsend_Byte_Limit"];
+    _heart_beat_interval = _conf["Heart_Beat_Interval"];
+    _heart_beat_msg = _conf["Heart_Beat_Msg"];
 }
 
 server_ntrip::~server_ntrip()
@@ -157,7 +157,7 @@ int server_ntrip::send_heart_beat_to_server()
 
     auto UnsendBufferSize = evbuffer_get_length(bufferevent_get_output(_bev));
 
-    if (_unsend_limit > 0 && UnsendBufferSize > _unsend_limit)
+    if (_unsend_byte_limit > 0 && UnsendBufferSize > _unsend_byte_limit)
     {
         spdlog::info("[{}:{}: send to server [{}]'s  unsend size is too large :[{}], close the connect! addr:[{}:{}]", __class__, __func__, _mount_point, UnsendBufferSize, _ip, _port);
         stop();
@@ -169,7 +169,6 @@ int server_ntrip::send_heart_beat_to_server()
 
 int server_ntrip::decode_recv_raw_data()
 {
-    
 
     return 0;
 }

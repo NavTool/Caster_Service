@@ -10,9 +10,17 @@
 
 ntrip_compat_listener::ntrip_compat_listener(json conf, event_base *base, std::unordered_map<std::string, bufferevent *> *connect_map)
 {
-    _listen_port = conf["Port"];
-    _connect_timeout = conf["Timeout"];
-    _enable_no_CRLF = conf["Enable_No_CRLF"];
+    _listen_port = conf["Listen_Port"];
+    _connect_timeout = conf["Connect_Timeout"];
+
+    _enable_source_login = conf["Enable_Source_Login"];
+    _enable_server_login = conf["Enable_Server_Login"];
+    _enable_client_login = conf["Enable_Client_Login"];
+    _enable_nearest_mpt = conf["Enable_Nearest_MPT"];
+    _enable_virtual_mpt = conf["Enable_Virtual_MPT"];
+    _enable_common_mpt = conf["Enable_Common_MPT"];
+
+    _enable_header_no_CRLF = conf["Enable_Header_No_CRLF"];
 
     _base = base;
     _connect_map = connect_map;
@@ -156,7 +164,7 @@ void ntrip_compat_listener::Ntrip_Decode_Request_cb(bufferevent *bev, void *ctx)
     size_t header_len = 0;
     char *header = evbuffer_readln(evbuf, &header_len, EVBUFFER_EOL_CRLF);
 
-    if (header == NULL && svr->_enable_no_CRLF) // 允许不带回车换行的请求登录
+    if (header == NULL && svr->_enable_header_no_CRLF) // 允许不带回车换行的请求登录
     {
         auto len = evbuffer_get_length(evbuf);
         if (len < 255)

@@ -24,8 +24,6 @@ int client_grid::start()
 
 
 
-
-
     return 0;
 }
 

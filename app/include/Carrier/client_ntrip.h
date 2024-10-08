@@ -26,7 +26,7 @@ private:
     int _port;
 
     int _connect_timeout = 0;
-    int _unsend_limit;
+    int _unsend_byte_limit;
 
     bool _NtripVersion2 = false;
     bool _transfer_with_chunked = false;

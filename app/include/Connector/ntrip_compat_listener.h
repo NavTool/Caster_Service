@@ -45,10 +45,20 @@
 class ntrip_compat_listener
 {
 private:
+    // 配置
     int _listen_port;
     int _connect_timeout = 0;
-    bool _enable_no_CRLF = true;
 
+    bool _enable_source_login = true;
+    bool _enable_server_login = true;
+    bool _enable_client_login = true;
+    bool _enable_nearest_mpt = false;
+    bool _enable_virtual_mpt = false;
+    bool _enable_common_mpt = true;
+
+    bool _enable_header_no_CRLF = false;
+
+    // 内部
     bool _disable_new_connect = false;
 
     event_base *_base;

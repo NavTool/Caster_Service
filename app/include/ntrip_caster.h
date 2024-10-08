@@ -45,7 +45,7 @@ private:
     json _server_setting;
 
     bool _output_state;
-    int _timeout_intv;
+    int _refresh_state_interval;
 
 public:
     event *_license_check_ev;

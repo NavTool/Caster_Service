@@ -92,13 +92,12 @@ ntrip_caster::ntrip_caster(json cfg)
     _client_setting = _service_setting["Client_Setting"];
     _server_setting = _service_setting["Server_Setting"];
 
-    _timeout_intv = _common_setting["Timeout_Intv"];
-
+    _refresh_state_interval = _common_setting["Refresh_State_Interval"];
     _output_state = _common_setting["Output_State"];
 
     _base = event_base_new();
 
-    _timeout_tv.tv_sec = _timeout_intv;
+    _timeout_tv.tv_sec = _refresh_state_interval;
     _timeout_tv.tv_usec = 0;
     _timeout_ev = event_new(_base, -1, EV_PERSIST, TimeoutCallback, this);
 }
@@ -198,7 +197,7 @@ int ntrip_caster::compontent_stop()
 
 int ntrip_caster::extra_init()
 {
-    init_license_check();
+    // init_license_check();
 
     return 0;
 }

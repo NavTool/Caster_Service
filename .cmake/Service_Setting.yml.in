@@ -5,17 +5,18 @@
 Ntrip_Listener_Setting:
   Listen_Port: 4202           #监听的端口
   Connect_Timeout: 30         #连接无响应超时时间(建立了TCP连接但是并不发送验证信息)(/秒)(≤0 ：关闭) 
-  Enable_Server_Login: true   #处理基站连接请求
-  Enable_Client_Login: true   #处理移动站连接请求
-  Enable_Source_Login: true   #处理获取源列表请求
-  Header_No_CRLF: true        #兼容模式,允许用户仅发送Header头登录,且不必发送回车换行,但是同时由于没有回车换行,也不能携带除挂载点之外的任何信息
-  Enable_Nearest: false       #最近挂载点模式,启动之后,指定的挂载点名会被识别为Nearest登录策略
-  Nearest_List: NEAREST       #被识别为Nearest策略的登录挂载点
+  Enable_Source_Login: true   #处理获取源列表请求（允许用户以GET /请求访问）
+  Enable_Server_Login: true   #处理基站连接请求（允许用户以SOURCE|POST请求访问）
+  Enable_Client_Login: true   #处理移动站连接请求（允许用户以GET请求访问）
+  Enable_Nearest_MPT: false   #最近挂载点模式,启动之后,会查询该挂载点是否是最近点模式的挂载点，然后以最近挂载点登录（优先级1，最先判断）
+  Enable_Virtual_MPT: false   #最近挂载点模式,启动之后,会查询该挂载点是否是最近点模式的挂载点，然后以虚拟挂载点登录（优先级2）
+  Enable_Common_MPT: true     #普通挂载点模式,启动之后,会查询该普通挂载点是否在线，然后以普通挂载点登录（优先级3）
+  Enable_Header_No_CRLF: true        #兼容模式,允许用户仅发送Header头登录,且不必发送回车换行,但是同时由于没有回车换行,也不能携带除挂载点之外的任何信息
 
 #基站相关设置
 Server_Setting:                
   Connect_Timeout: 30        #超时时间(未收到基站数据超过一定时间)(/秒)(≤0 ：关闭) 
-  Unsend_Threshold: 128      #当发送缓冲区中未发送字节超过该值则触发关闭连接操作(用来关闭异常的连接)(/字节)(≤0 ：不启用此功能)
+  Unsend_Byte_Limit: 128      #当发送缓冲区中未发送字节超过该值则触发关闭连接操作(用来关闭异常的连接)(/字节)(≤0 ：不启用此功能)
   Heart_Beat_Interval: 0     #发送心跳间隔(/秒)(≤0 ：关闭) 
   Heart_Beat_Msg: "\r\n"     #心跳包内容
   # Data_Record: true        #(未实现)记录接收信息(正式连接建立后启用,不包括header信息)
@@ -24,7 +25,7 @@ Server_Setting:
 #用户相关设置
 Client_Setting:
   Connect_Timeout: 0         #超时时间(未收到用户数据超过一定时间)(/秒)(≤0 ：关闭)
-  Unsend_Threshold: 20480    #当发送缓冲区中未发送字节超过该值则触发关闭连接操作(用来关闭实际上已经不存在的连接)(/字节)(≤0 ：不启用此功能)
+  Unsend_Byte_Limit: 20480    #当发送缓冲区中未发送字节超过该值则触发关闭连接操作(用来关闭实际上已经不存在的连接)(/字节)(≤0 ：不启用此功能)
   # Data_Record: true          #(未实现)记录接收信息(正式连接建立后启用,不包括header信息)
   # Save_Path: /UserRecord     #(未实现)保存路径 (格式：/YYYYMMDD/UserName/HHMMSS_ConnectKey.log)
 
@@ -39,7 +40,7 @@ Client_Setting:
 Common_Setting:
   Refresh_State_Interval: 10  #程序运行状态更新间隔(内部超时函数)(/秒)
   Output_State: true          #输出状态统计信息
-  Working_Directory:          #(未实现)工作路径(所有的输出文件都以此路径为相对路径进行输出,不设置则默认在可执行程序启动时的路径下)
+  #Working_Directory:          #(未实现)工作路径(所有的输出文件都以此路径为相对路径进行输出,不设置则默认在可执行程序启动时的路径下)
 
 #输出运行状态
 Log_Setting:

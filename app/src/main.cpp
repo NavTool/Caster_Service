@@ -58,22 +58,28 @@ json load_Caster_Conf(const char *conf_directory)
 
     // 配置转json
     auto Ntrip_Listener_Setting = Conf["Ntrip_Listener_Setting"];
-    conf["Ntrip_Listener"]["Port"] = Ntrip_Listener_Setting["Listen_Port"].as<int>();
-    conf["Ntrip_Listener"]["Timeout"] = Ntrip_Listener_Setting["Connect_Timeout"].as<int>();
-    conf["Ntrip_Listener"]["Enable_No_CRLF"] = Ntrip_Listener_Setting["Header_No_CRLF"].as<bool>();
+    conf["Ntrip_Listener"]["Listen_Port"] = Ntrip_Listener_Setting["Listen_Port"].as<int>();
+    conf["Ntrip_Listener"]["Connect_Timeout"] = Ntrip_Listener_Setting["Connect_Timeout"].as<int>();
+    conf["Ntrip_Listener"]["Enable_Source_Login"] = Ntrip_Listener_Setting["Enable_Source_Login"].as<bool>();
+    conf["Ntrip_Listener"]["Enable_Server_Login"] = Ntrip_Listener_Setting["Enable_Server_Login"].as<bool>();
+    conf["Ntrip_Listener"]["Enable_Client_Login"] = Ntrip_Listener_Setting["Enable_Client_Login"].as<bool>();
+    conf["Ntrip_Listener"]["Enable_Nearest_MPT"] = Ntrip_Listener_Setting["Enable_Nearest_MPT"].as<bool>();
+    conf["Ntrip_Listener"]["Enable_Virtual_MPT"] = Ntrip_Listener_Setting["Enable_Virtual_MPT"].as<bool>();
+    conf["Ntrip_Listener"]["Enable_Common_MPT"] = Ntrip_Listener_Setting["Enable_Common_MPT"].as<bool>();
+    conf["Ntrip_Listener"]["Enable_Header_No_CRLF"] = Ntrip_Listener_Setting["Enable_Header_No_CRLF"].as<bool>();
 
     auto Server_Setting = Conf["Server_Setting"];
-    conf["Server_Setting"]["Timeout"] = Server_Setting["Connect_Timeout"].as<int>();
-    conf["Server_Setting"]["Heartbeat_Intv"] = Server_Setting["Heart_Beat_Interval"].as<int>();
-    conf["Server_Setting"]["Heartbeat_Msg"] = Server_Setting["Heart_Beat_Msg"].as<std::string>();
-    conf["Server_Setting"]["Unsend_Limit"] = Server_Setting["Unsend_Threshold"].as<int>();
+    conf["Server_Setting"]["Connect_Timeout"] = Server_Setting["Connect_Timeout"].as<int>();
+    conf["Server_Setting"]["Unsend_Byte_Limit"] = Server_Setting["Unsend_Byte_Limit"].as<int>();
+    conf["Server_Setting"]["Heart_Beat_Interval"] = Server_Setting["Heart_Beat_Interval"].as<int>();
+    conf["Server_Setting"]["Heart_Beat_Msg"] = Server_Setting["Heart_Beat_Msg"].as<std::string>();
 
     auto Client_Setting = Conf["Client_Setting"];
-    conf["Client_Setting"]["Timeout"] = Client_Setting["Connect_Timeout"].as<int>();
-    conf["Client_Setting"]["Unsend_Limit"] = Client_Setting["Unsend_Threshold"].as<int>();
+    conf["Client_Setting"]["Connect_Timeout"] = Client_Setting["Connect_Timeout"].as<int>();
+    conf["Client_Setting"]["Unsend_Byte_Limit"] = Client_Setting["Unsend_Byte_Limit"].as<int>();
 
     auto Common_Setting = Conf["Common_Setting"];
-    conf["Common_Setting"]["Timeout_Intv"] = Common_Setting["Refresh_State_Interval"].as<int>();
+    conf["Common_Setting"]["Refresh_State_Interval"] = Common_Setting["Refresh_State_Interval"].as<int>();
     conf["Common_Setting"]["Output_State"] = Common_Setting["Output_State"].as<bool>();
 
     auto Log_Setting = Conf["Log_Setting"];

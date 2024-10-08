@@ -20,6 +20,26 @@
 
 */
 
+
+/*
+    虚拟站点挂载逻辑：
+
+    发送的消息中包含GGA，
+        触发订阅逻辑
+
+    发送的消息中不包含GGA，
+        等待GGA来，触发订阅逻辑
+    
+    用户名验证成功就可以发送ICY 200 OK了，看是Ntrip1.0还是2.0
+
+    
+
+
+
+*/
+
+
+
 /*
     用户已经上线的情况下，向redis写入用户登录信息
     判断当前已登录的用户数量，如果超过限制，启动下线流程
@@ -48,7 +68,7 @@ private:
     int _port;
 
     int _connect_timeout = 0;
-    int _unsend_limit;
+    int _unsend_byte_limit;
 
     bool _NtripVersion2 = false;
     bool _transfer_with_chunked = false;
@@ -85,5 +105,13 @@ private:
 private:
 
     int decode_GGA();
+
+
+    //添加新的订阅条件
+
+    int Geo_Search_Callback(const char *request, void *arg, catser_reply *reply); //查询指定半径挂载点
+    int Grid_Search_Callback(const char *request, void *arg, catser_reply *reply); //获取指定半径挂载点是否在线
+
+
 
 };

@@ -10,10 +10,10 @@ client_ntrip::client_ntrip(json req, bufferevent *bev)
     _info = req;
     _bev = bev;
 
-    _user_name = req["user_name"];
-    _mount_point = req["mount_point"];
-    _connect_key = req["connect_key"];
-    if (req["ntrip_version"] == "Ntrip/2.0")
+    _user_name = _info["user_name"];
+    _mount_point = _info["mount_point"];
+    _connect_key = _info["connect_key"];
+    if (_info["ntrip_version"] == "Ntrip/2.0")
     {
         _NtripVersion2 = true;
         _transfer_with_chunked = true;
@@ -26,8 +26,8 @@ client_ntrip::client_ntrip(json req, bufferevent *bev)
     _send_evbuf = evbuffer_new();
     _recv_evbuf = evbuffer_new();
 
-    _connect_timeout = _conf["Timeout"];
-    _unsend_limit = _conf["Unsend_Limit"];
+    _connect_timeout = _conf["Connect_Timeout"];
+    _unsend_byte_limit = _conf["Unsend_Byte_Limit"];
 }
 
 client_ntrip::~client_ntrip()
@@ -137,7 +137,7 @@ int client_ntrip::transfer_sub_raw_data(const char *data, size_t length)
 {
     auto UnsendBufferSize = evbuffer_get_length(bufferevent_get_output(_bev));
 
-    if (_unsend_limit > 0 && UnsendBufferSize > _unsend_limit)
+    if (_unsend_byte_limit > 0 && UnsendBufferSize > _unsend_byte_limit)
     {
         spdlog::info("[{}:{}: send to user [{}]'s date unsend size is too large :[{}], close the connect! using mount [{}], addr:[{}:{}]", __class__, __func__, _user_name, UnsendBufferSize, _mount_point, _ip, _port);
         stop();
