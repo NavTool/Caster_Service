@@ -276,12 +276,12 @@ void ntrip_compat_listener::Ntrip_Decode_Request_cb(bufferevent *bev, void *ctx)
     catch (int i)
     {
         spdlog::warn("[{}:{}]: process error request, from: [ip: {} port: {}] ", __class__, __func__, ip, port);
-        svr->Process_Unknow_Request(bev, connect_key);
+        svr->Process_Unsupport_Request(bev, connect_key);
     }
     catch (std::exception &e)
     {
         spdlog::warn("[{}:{}]: process error request, from: [ip: {} port: {}] ,what: {}", __class__, __func__, ip, port, e.what());
-        svr->Process_Unknow_Request(bev, connect_key);
+        svr->Process_Unsupport_Request(bev, connect_key);
     }
 
     // 清理
@@ -333,32 +333,23 @@ int ntrip_compat_listener::Process_GET_Request(bufferevent *bev, std::string con
     std::string mount = req["mount_point"];
     if (mount.empty()) // 相当于"/"
     {
+        if (!_enable_source_login)
+        {
+            spdlog::info("[{}:{}]: Accept Source Request, but enable_source_login is false, reject request",__class__, __func__); // 接收到了源列表获取请求，但不进行处理
+            erase_and_free_bev(bev, connect_key);
+            return 1;
+        }
         req["req_type"] = REQUEST_SOURCE_LOGIN;
     }
     else
     {
+        if (!_enable_client_login)
+        {
+            spdlog::info("[{}:{}]: Accept Client Request, but enable_client_login is false, reject request",__class__, __func__); // 接收到了源列表获取请求，但不进行处理
+            erase_and_free_bev(bev, connect_key);
+            return 1;
+        }
         req["req_type"] = REQUEST_CLIENT_LOGIN;
-        // switch (CASTER::Check_Mount_Type(mount.c_str()))
-        // {
-        // case CASTER::STATION_COMMON:
-        //     req["req_type"] = REQUEST_CLIENT_LOGIN;
-        //     break;
-        // case CASTER::STATION_NEAREST:
-        //     req["req_type"] = REQUEST_VIRTUAL_LOGIN;
-        //     req["mount_group"] = MOUNT_TYPE_NEAREST;
-        //     break;
-        // case CASTER::STATION_RELAY:
-        //     req["req_type"] = REQUEST_VIRTUAL_LOGIN;
-        //     req["mount_group"] = MOUNT_TYPE_RELAY;
-        //     break;
-        // case CASTER::STATION_VIRTUAL:
-        //     req["req_type"] = REQUEST_VIRTUAL_LOGIN;
-        //     req["mount_group"] = MOUNT_TYPE_VIRTUAL;
-        //     break;
-        // default: // CASTER::STATION_COMMON
-
-        //     break;
-        // }
     }
 
     std::string userID = req["user_baseID"];
@@ -369,6 +360,13 @@ int ntrip_compat_listener::Process_GET_Request(bufferevent *bev, std::string con
 
 int ntrip_compat_listener::Process_POST_Request(bufferevent *bev, std::string connect_key, const char *url)
 {
+    if (!_enable_server_login)
+    {
+        spdlog::info("[{}:{}]: Accept Server Request, but enable_server_login is false, reject request",__class__, __func__); // 接收到了基站登录请求，但不进行处理
+        erase_and_free_bev(bev, connect_key);
+        return 1;
+    }
+
     json req = decode_bufferevent_req(bev, connect_key);
     req["mount_point"] = extract_path(url);
     req["mount_para"] = extract_para(url);
@@ -382,6 +380,13 @@ int ntrip_compat_listener::Process_POST_Request(bufferevent *bev, std::string co
 
 int ntrip_compat_listener::Process_SOURCE_Request(bufferevent *bev, std::string connect_key, const char *url, const char *secret)
 {
+    if (!_enable_server_login)
+    {
+        spdlog::info("[{}:{}]: Accept Server Request, but enable_server_login is false, reject request",__class__, __func__); // 接收到了基站登录请求，但不进行处理
+        erase_and_free_bev(bev, connect_key);
+        return 1;
+    }
+
     json req = decode_bufferevent_req(bev, connect_key);
     req["mount_point"] = extract_path(url);
     req["mount_para"] = extract_para(url);
@@ -400,7 +405,7 @@ int ntrip_compat_listener::Process_SOURCE_Request(bufferevent *bev, std::string 
     return 0;
 }
 
-int ntrip_compat_listener::Process_Unknow_Request(bufferevent *bev, std::string connect_key)
+int ntrip_compat_listener::Process_Unsupport_Request(bufferevent *bev, std::string connect_key)
 {
     erase_and_free_bev(bev, connect_key);
     return 0;
@@ -629,7 +634,7 @@ int ntrip_compat_listener::erase_and_free_bev(bufferevent *bev, std::string Conn
     }
     else
     {
-        spdlog::warn("[{}:{}]: con't find bev in connetc_map, connect key: {}", __class__, __func__, Connect_Key);
+        spdlog::warn("[{}:{}]: con't find bev in connect_map, connect key: {}", __class__, __func__, Connect_Key);
         bufferevent_free(bev);
     }
 

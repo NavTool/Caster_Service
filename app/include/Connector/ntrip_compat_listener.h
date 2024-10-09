@@ -90,7 +90,7 @@ public:
     int Process_GET_Request(bufferevent *bev, std::string connect_key, const char *path);
     int Process_POST_Request(bufferevent *bev, std::string connect_key, const char *path);
     int Process_SOURCE_Request(bufferevent *bev, std::string connect_key, const char *path, const char *secret);
-    int Process_Unknow_Request(bufferevent *bev, std::string connect_key);
+    int Process_Unsupport_Request(bufferevent *bev, std::string connect_key);
 
     // Auth验证回调
     static void Auth_Verify_Cb(const char *request, void *arg, AuthReply *reply);
