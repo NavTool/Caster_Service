@@ -41,6 +41,7 @@ private:
     // 定时器和定时事件
     event *_timeout_ev;
     timeval _timeout_tv;
+    bool _timeout_ev_flag=false; //是否将timeout_ev注册到event_base的标记
 
 public:
     server_ntrip(json req, bufferevent *bev);
