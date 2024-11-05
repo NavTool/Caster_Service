@@ -3,21 +3,21 @@ cmake -B build -DCMAKE_CXX_COMPILER=cl -DCMAKE_C_COMPILER=cl -DCMAKE_RUNTIME_OUT
 
 cmake --build build --config Release -- /m
 
-# ÒÆ¶¯ËùÓĞÎÄ¼şºÍ×ÓÄ¿Â¼´Ó build/release µ½ build
+# ç§»åŠ¨æ‰€æœ‰æ–‡ä»¶å’Œå­ç›®å½•ä» build/release åˆ° build
 Move-Item -Path "bin\Release\*" -Destination "bin"  -Force
 
-# É¾³ı build/release Ä¿Â¼
+# åˆ é™¤ build/release ç›®å½•
 Remove-Item -Path "bin\Release" -Recurse -Force
 
-# ´´½¨Ä¿±êÄ¿Â¼
+# åˆ›å»ºç›®æ ‡ç›®å½•
 New-Item -Path "bin\env" -ItemType Directory -Force
-# ´´½¨Ä¿±êÄ¿Â¼
+# åˆ›å»ºç›®æ ‡ç›®å½•
 New-Item -Path "bin\env\redis" -ItemType Directory -Force
 
-# ÒÆ¶¯Ä¿Â¼ºÍÎÄ¼ş
+# ç§»åŠ¨ç›®å½•å’Œæ–‡ä»¶
 Copy-Item -Path "env\Redis-7.4.0-Windows-x64-msys2\*" -Destination "bin\env\redis" -Recurse -Force
 
-# ¸´ÖÆÎÄ¼ş£¬²¢ÖØÃüÃû
+# å¤åˆ¶æ–‡ä»¶ï¼Œå¹¶é‡å‘½å
 Copy-Item -Path ".cmake\redis_windows.conf.in" -Destination "bin\env\redis\redis.conf" -Force
 
 Copy-Item -Path "env\scripts" -Destination "bin\env\scripts" -Recurse -Force
