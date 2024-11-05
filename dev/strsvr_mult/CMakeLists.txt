@@ -18,5 +18,4 @@ add_executable(${PROJECT_NAME} ${MAIN_SOURCES})
 
 target_link_libraries(${PROJECT_NAME} rtklib)
 
-set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin/dev/${PROJECT_NAME}")
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/tasklist.txt ${CMAKE_SOURCE_DIR}/bin/dev/${PROJECT_NAME}/tasklist.txt @ONLY)
+
