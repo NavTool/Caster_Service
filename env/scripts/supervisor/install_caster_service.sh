@@ -1,22 +1,22 @@
 #!/bin/bash
 
 cd $(dirname "$(readlink -f "$0")")
-cd ../../env
+cd ../../..
 # 获取当前服务的根目录
 #EXECUTABLE_DIR=$(dirname "$(readlink -f "$0")")
 EXECUTABLE_DIR=$(pwd)
 
 # 固定的可执行程序名称
-EXECUTABLE_NAME="redis-server"
+EXECUTABLE_NAME="Caster_Service"
 
 # Supervisor注册的名称
-SUPERVISOR_NAME="REDIS_SERVICE"
+SUPERVISOR_NAME="CASTER_SERVICE"
 
 # 配置文件路径
 CONFIG_FILE="/etc/supervisor/conf.d/$SUPERVISOR_NAME.conf"
 
 # 守护进程的完整路径
-COMMAND="$EXECUTABLE_DIR/$EXECUTABLE_NAME  $EXECUTABLE_DIR/redis.config"
+COMMAND="$EXECUTABLE_DIR/$EXECUTABLE_NAME"
 
 # 文件路径
 SUPERVISOR_SERVICE_PATH="/usr/lib/systemd/system/supervisor.service "
@@ -107,8 +107,6 @@ echo "启动服务,请运行:sudo supervisorctl start $SUPERVISOR_NAME"
 echo "停止服务,请运行:sudo supervisorctl stop $SUPERVISOR_NAME"
 echo "重启服务,请运行:sudo supervisorctl restart $SUPERVISOR_NAME"
 echo "服务状态,请运行:sudo supervisorctl status $SUPERVISOR_NAME"
-
-
 
 
 

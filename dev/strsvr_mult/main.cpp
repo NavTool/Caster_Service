@@ -32,15 +32,28 @@
 #include <signal.h>
 #include <unistd.h>
 #include "rtklib.h"
+#include <list>
+#include <string>
+
+#include <fstream>
+#include <sstream>
+#include <thread>
+#include <vector>
+#include <string>
+#include <memory>
+
+#ifdef WIN32
+#include <cstdlib>  // 包含 system 函数
+#else
+
+#endif
 
 //for Linux
 #ifndef MAXPATH
 #define MAXPATH 4096
 #endif
 
-
 #define MAX_CMD_ARGV  50
-
 
 #define	SIGHUP		1	/* Hangup.  */
 #define	SIGPIPE		13	/* Broken pipe.  */  //添加了两个宏定义  linux独有的？  使得程序可以直接在windows下编译和运行
@@ -211,7 +224,8 @@ static void readcmd(const char *file, char *cmd, int type)
     fclose(fp);
 }
 /* str2str -------------------------------------------------------------------*/
-int str2str(strsvr_t *strsvr,int argc, char **argv)
+//int str2str(strsvr_t *strsvr,int argc, char **argv)
+int str2str(strsvr_t *strsvr,int argc, char* argv[])
 {
     static char cmd_strs[MAXSTR][MAXRCVCMD]={"","","","",""};
     static char cmd_periodic_strs[MAXSTR][MAXRCVCMD]={"","","","",""};
@@ -339,11 +353,9 @@ int str2str(strsvr_t *strsvr,int argc, char **argv)
     return 0;
 }
 
-int svrstate(strsvr_t *strsvr,int ID)
+int svrstate(strsvr_t *strsvr)
 {
     //dispint  刷新时间 最小1000ms
-
-
     const char ss[]={'E','-','W','C','C'};
 
     char buff[256],*p;
@@ -353,15 +365,13 @@ int svrstate(strsvr_t *strsvr,int ID)
     int stat[MAXSTR]={0},log_stat[MAXSTR]={0};
     int byte[MAXSTR]={0},bps[MAXSTR]={0};
 
-
-
         /* get stream server status */
         strsvrstat(strsvr,stat,log_stat,byte,bps,strmsg);
 
         /* show stream server status */
         for (i=0,p=buff;i<MAXSTR;i++) p+=sprintf(p,"%c",ss[stat[i]+1]);
 
-        fprintf(stderr,"TASKID:%d %s [%s] %10d B %7d bps %s\n",ID,
+        fprintf(stderr,"|  %s [%s] %10d B %7d bps %s  |",
                 time_str(utc2gpst(timeget()),0),buff,byte[0],bps[0],strmsg);
 
         //sleepms(dispint);
@@ -395,147 +405,97 @@ int svrstop(strsvr_t *strsvr,int n)
     fprintf(stderr,"stream server stop\n");
 
     return 0;
-
 }
 
-int char2arg(char* str, int* argc, char** argv, int number)
-{
-    char *p;
-    int num=0;
-    int word_start = 1;
+// 从文件中读取参数，并将每一行解析成 argc 和 argv 格式
+std::vector<std::vector<std::string>> readArgsFromFile(const std::string& filename) {
+    std::ifstream file(filename);
+    std::string line;
+    std::vector<std::vector<std::string>> allArgs;
 
-    if(argc == NULL || argv == NULL)
-        return -1;
+    // 逐行读取文件并解析参数
+    while (std::getline(file, line)) {
 
-    p=str;
-
-    while(*p){
-        if((*p == '\r') || (*p == '\n')){
-            *p = '\0';
-            break;
+        if (line.find("END OF LINE") != std::string::npos) {
+            // std::cout << "Found 'END OF LINE'. Stopping reading further lines." << std::endl;
+            break;  // 停止读取文件
         }
-        if((*p == ' ') || (*p == '\t')){
-            word_start = 1;
-            *p = '\0';
-            p++;
-            continue;
-        }
-        if(num >= number)
-            break;
 
-        if(word_start){
-            argv[num++] = p;
-            word_start = 0;
+        std::istringstream iss(line);
+        std::vector<std::string> args;
+        std::string arg;
+        while (iss >> arg) {
+            args.push_back(arg);  // 将每个参数放入 args
         }
-        p++;
+        allArgs.push_back(args);  // 将每一行参数集加入 allArgs
     }
 
-    *argc = num;
-
-    return 0;
+    return allArgs;
 }
 
-
-int main(int argc, char **argv)
+int main(int argcc, char **argvv)
 {
-    int dispint=1000;//控制台状态刷新的时间
-    int maxtask=500;//最大支持的任务数量
-    int tasknum=0;
 
-    char task[maxtask][MAXPATH];
+    std::string filename ;
 
-    char taskpath[MAXPATH];
-
-    //读文件，获取数据流内容和数据流数量
-
-    if(argc<2)
+    if(argcc<2)
     {
-        strcpy(taskpath,"tasklist.txt");
-
+       filename= "tasklist.txt";
     }
     else
     {
-     for (int i=1;i<argc;i++)
-     {
-         if (!strcmp(argv[i],"-i")&&i+1<argc)
-         {
-              strcpy(taskpath,argv[++i]);
-         }
-     }
+        for (int i=1;i<argcc;i++)
+        {
+            if (!strcmp(argvv[i],"-i")&&i+1<argcc)
+            {
+                filename=argvv[++i];
+            }
+        }
     }
 
-     printf("set tasklist path: %s\n",taskpath);
+    // 从文件中读取命令行参数
+    std::vector<std::vector<std::string>> allArgs = readArgsFromFile(filename);
+    std::vector<std::thread> threads;
+    std::vector<strsvr_t*> strsvrs;  // 存储所有线程的 svr 结构体指针
 
-
-          //  if (!decodepath(argv[++i],types,paths[0],fmts)) return -1;
-
-
-
-    FILE *tasklist=fopen(taskpath,"r");
-    if(tasklist == NULL)
-        {
-            printf("taskpath: %s open error!\n",taskpath);
-            return 0;
+    // 为每组参数创建一个线程
+    int thread_id = 1;
+    for (const auto& args : allArgs) {
+        // 转换 std::string 到 char*，以符合 argc 和 argv 的格式
+        std::vector<char*> argv;
+        for (const auto& arg : args) {
+            argv.push_back(const_cast<char*>(arg.c_str()));  // 将 std::string 转换为 char*
         }
 
+        int argc = argv.size();  // 参数的数量
 
-   // char a[MAXCHAR];
-    //fgets(a,MAXCHAR,tasklist);//读文件头并略过
+        // 创建 svr 结构体并初始化
+        strsvr_t *svr = new strsvr_t;
 
-    for(tasknum=0;tasknum<maxtask;)
-    {
+        // 存储 svr 指针到列表中
+        strsvrs.push_back(svr);
 
-        fgets(task[tasknum],MAXPATH,tasklist);
-
-        if (strstr(task[tasknum], "END OF LIST") != NULL)
-        {
-            printf("tasknum=%d end\n",tasknum);
-            break;
-        }
-
-        printf("%d %s\n",tasknum,task[tasknum]);
-        tasknum++;
-
+        // 创建一个线程并传递 argc、argv 和 svr 指针
+        // threads.emplace_back(str2str, svr,argc, argv.data());
+        str2str(svr,argc, argv.data());
     }
-
-
-    //确定要开的线程数量n
-    int n=tasknum;
-
-    int argcc[n];
-    char *argvv[n][MAX_CMD_ARGV];
-
-
-    strsvr_t strsvr[n];
-
-
-
-    for(int i=0;i<n;i++)
-    {
-         char2arg(task[i],&argcc[i],argvv[i],MAX_CMD_ARGV);
-    }
-    for(int i=0;i<n;i++)
-    {
-        str2str(&strsvr[i],argcc[i],argvv[i]);
-    }
-
-
-    dispint=dispint<1000?1000:dispint;
 
     sleepms(1000);
     for (intrflg=0;!intrflg;)
     {
+        printf("taskpath:%s\n",filename.c_str());
 
-        printf("taskpath:%s\n",taskpath);
-
-        for(int i=0;i<n;i++)
+        int i=0;
+        for(auto iter:strsvrs)
         {
-
-
-            svrstate(&strsvr[i],i+1);
-
+            svrstate(iter);
+            i++;
+            if(i==3){
+                i=0;
+                fprintf(stderr,"\n");
+            }
         }
-        sleepms(dispint);
+        sleepms(5000);
 #ifdef WIN32
         system("cls");
 #else
@@ -543,10 +503,6 @@ int main(int argc, char **argv)
 #endif
     }
 
-
-
-    svrstop(strsvr,n);
-
-
-
+    // svrstop(strsvr,n);
+    exit(0);
 }

@@ -13,7 +13,9 @@ Remove-Item -Path "bin\Release" -Recurse -Force
 New-Item -Path "bin\env" -ItemType Directory -Force
 
 # 移动目录和文件
-Move-Item -Path "env\Redis-7.4.0-Windows-x64-msys2\*" -Destination "bin\env" -Force
+Move-Item -Path "env\Redis-7.4.0-Windows-x64-msys2" -Destination "bin\env\redis" -Force
 
 # 复制文件，并重命名
-Copy-Item -Path ".cmake\redis_windows.conf.in" -Destination "bin\env\redis.conf" -Force
+Copy-Item -Path ".cmake\redis_windows.conf.in" -Destination "bin\env\redis\redis.conf" -Force
+
+Move-Item -Path "env\script" -Destination "bin\env\script" -Force

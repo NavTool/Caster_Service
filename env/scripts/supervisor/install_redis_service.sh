@@ -1,7 +1,7 @@
 #!/bin/bash
 
 cd $(dirname "$(readlink -f "$0")")
-cd ../../env
+cd ../../redis
 # 获取当前服务的根目录
 #EXECUTABLE_DIR=$(dirname "$(readlink -f "$0")")
 EXECUTABLE_DIR=$(pwd)

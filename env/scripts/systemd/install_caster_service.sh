@@ -44,6 +44,8 @@ LimitNOFILE=65535
 WantedBy=multi-user.target
 EOL
 
+#重新加载systemctl
+sudo systemctl daemon-reload
 
 # 提示如何启动和关闭服务
 echo "服务管理提示："
