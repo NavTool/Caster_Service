@@ -1,2 +1,2 @@
 
-add_subdirectory(strsvr_mult/)
+# add_subdirectory(strsvr_mult/)
