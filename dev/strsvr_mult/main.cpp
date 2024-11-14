@@ -277,7 +277,7 @@ int str2str(strsvr_t *strsvr, int argc, char *argv[])
     char *local = const_cast<char *>(empty_string), *proxy = const_cast<char *>(empty_string), *msg = const_cast<char *>(msg_string), *opt = const_cast<char *>(empty_string), buff[256], *p;
     char strmsg[MAXSTRMSG] = "", *antinfo = const_cast<char *>(empty_string), *rcvinfo = const_cast<char *>(empty_string);
     char *ant[] = {const_cast<char *>(empty_string), const_cast<char *>(empty_string), const_cast<char *>(empty_string)}, *rcv[] = {const_cast<char *>(empty_string), const_cast<char *>(empty_string), const_cast<char *>(empty_string)}, *logfile = const_cast<char *>(empty_string);
-    int i, j, n = 0, dispint = 5000, trlevel = 0, opts[] = {10000, 10000, 2000, 32768, 10, 0, 30, 0};
+    int i, j, n = 0, dispint = 5000, trlevel = 0, opts[] = {30000, 30000, 2000, 32768, 10, 0, 30, 0};
     int types[MAXSTR] = {STR_FILE, STR_FILE}, stat[MAXSTR] = {0}, log_stat[MAXSTR] = {0};
     int byte[MAXSTR] = {0}, bps[MAXSTR] = {0}, fmts[MAXSTR] = {0}, sta = 0;
 
