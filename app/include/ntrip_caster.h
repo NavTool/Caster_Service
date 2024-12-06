@@ -9,8 +9,10 @@
 // #include "Carrier/server_relay.h"
 #include "Carrier/source_ntrip.h"
 #include "DB/relay_account_tb.h"
-#include "Extra/heart_beat.h"
-#include "Extra/license_check.h"
+
+#include "heart_beat/heart_beat.h"
+#include "license_check/license_check.h"
+#include "info_upload/info_upload.h"
 
 #include <event2/util.h>
 #include <event2/event.h>
@@ -47,14 +49,7 @@ private:
     bool _output_state;
     int _refresh_state_interval;
 
-public:
-    event *_license_check_ev;
-    timeval _license_check_tv;
 
-    license_check _license_check;
-
-    int init_license_check();                                                        // 初始化许可检查
-    static void License_Check_Callback(evutil_socket_t fd, short events, void *arg); // 许可检查的函数
 
 public:
     // 公开的接口
@@ -123,4 +118,43 @@ public:
     // libevent回调
     static void Request_Process_Cb(evutil_socket_t fd, short what, void *arg);
     static void TimeoutCallback(evutil_socket_t fd, short events, void *arg);
+
+
+
+private:
+    // 扩展模块 许可检查功能--------------------------------------------------------------------------
+    event *_license_check_ev;
+    timeval _license_check_tv;
+
+    license_check _license_check;
+
+    int init_license_check();                                                        // 初始化许可检查
+    static void License_Check_Callback(evutil_socket_t fd, short events, void *arg); // 许可检查的函数
+
+
+private:
+    // 扩展模块 心跳上传功能--------------------------------------------------------------------------
+    event *_heart_beat_ev;
+    timeval _heart_beat_tv;
+
+    heart_beat _heart_beat;
+
+    int init_heart_beat();                                                        // 初始化信息上传功能
+    static void Heart_Beat_Callback(evutil_socket_t fd, short events, void *arg); // 定期上传信息的回调
+
+
+
+private:
+    // 扩展模块 站点信息上报功能--------------------------------------------------------------------------
+    event *_info_upload_ev;
+    timeval _info_upload_tv;
+
+    info_upload _info_upload;
+
+    int init_info_upload();                                                        // 初始化信息上传功能
+    static void Info_Upload_Callback(evutil_socket_t fd, short events, void *arg); // 定期上传信息的回调
+
+
+
+
 };

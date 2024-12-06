@@ -16,10 +16,11 @@ Ntrip_Listener_Setting:
 
 #基站相关设置
 Server_Setting:                
-  Connect_Timeout: 30         #超时时间(未收到基站数据超过一定时间)(/秒)(≤0 ：关闭) 
+  Connect_Timeout: 60         #超时时间(未收到基站数据超过一定时间)(/秒)(≤0 ：关闭) 
   Unsend_Byte_Limit: 128      #当发送缓冲区中未发送字节超过该值则触发关闭连接操作(用来关闭异常的连接)(/字节)(≤0 ：不启用此功能)
-  Heart_Beat_Interval: 0      #发送心跳间隔(/秒)(≤0 ：关闭) 
-  Heart_Beat_Msg: "\r\n"      #心跳包内容
+  Heart_Beat_Interval: 30     #发送心跳间隔(/秒)(≤0 ：关闭) 
+  Heart_Beat_Msg: "CDC200\r\n"      #心跳包内容
+  Decode_Raw_Data: true       #解析接收到的数据流（仅解析RTCM数据流）      
   # Data_Record: true         #(未实现)记录接收信息(正式连接建立后启用,不包括header信息)
   # Save_Path: /BaseRecord    #(未实现)保存路径 (格式：/YYYYMMDD/MountName/HHMMSS_ConnectKey.log)
 
@@ -27,6 +28,7 @@ Server_Setting:
 Client_Setting:
   Connect_Timeout: 0          #超时时间(未收到用户数据超过一定时间)(/秒)(≤0 ：关闭)
   Unsend_Byte_Limit: 20480    #当发送缓冲区中未发送字节超过该值则触发关闭连接操作(用来关闭实际上已经不存在的连接)(/字节)(≤0 ：不启用此功能)
+  Decode_NMEA: true           #解析接收到的数据流（当前版本仅解析NMEA格式GGA数据流）  
   # Data_Record: true         #(未实现)记录接收信息(正式连接建立后启用,不包括header信息)
   # Save_Path: /UserRecord    #(未实现)保存路径 (格式：/YYYYMMDD/UserName/HHMMSS_ConnectKey.log)
 
@@ -61,4 +63,6 @@ Register_Info:
   Register_Flie_Path: default
   License_Flie_Path: default
 
+
+#上传信息设置
 

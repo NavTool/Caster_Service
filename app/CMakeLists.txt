@@ -82,7 +82,7 @@ include_directories(${PROJECT_NAME} ${CMAKE_CURRENT_LIST_DIR}/include/Carrier)
 include_directories(${PROJECT_NAME} ${CMAKE_CURRENT_LIST_DIR}/include/Compontent)
 include_directories(${PROJECT_NAME} ${CMAKE_CURRENT_LIST_DIR}/include/Connector)
 include_directories(${PROJECT_NAME} ${CMAKE_CURRENT_LIST_DIR}/include/DB)
-include_directories(${PROJECT_NAME} ${CMAKE_CURRENT_LIST_DIR}/include/Extra)
+include_directories(${PROJECT_NAME} ${CMAKE_CURRENT_LIST_DIR}/extra)
 
 include_directories(${PROJECT_NAME} ${CMAKE_CURRENT_LIST_DIR}/src)
 
@@ -118,13 +118,17 @@ set(CONNECTOR_TYPE_SOURCE
 )
 
 set(EXTRA_SOURCE
-    # include/Extra/heart_beat.h
-    # src/Extra/heart_beat.cpp
-    include/Extra/license_check.h
-    src/Extra/license_check.cpp
-    src/Extra/license_check.cpp
-    src/Extra/register.h
-    src/Extra/register.cpp
+    #心跳模块
+    extra/heart_beat/heart_beat.h
+    extra/heart_beat/heart_beat.cpp
+    #注册码模块
+    extra/license_check/license_check.h
+    extra/license_check/license_check.cpp
+    extra/license_check/register.h
+    extra/license_check/register.cpp
+    #信息上传模块
+    extra/info_upload/info_upload.h
+    extra/info_upload/info_upload.cpp
 )
 
 set(MAIN_SOURCES

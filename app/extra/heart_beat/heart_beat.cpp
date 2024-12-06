@@ -23,7 +23,7 @@
 
 #define __class__ "redis_heart_beat"
 
-redis_heart_beat::redis_heart_beat(json conf)
+heart_beat::heart_beat(json conf)
 {
     _heart_beat_config = conf;
 
@@ -55,24 +55,24 @@ redis_heart_beat::redis_heart_beat(json conf)
     _start_tm = time(0);
 }
 
-redis_heart_beat::~redis_heart_beat()
+heart_beat::~heart_beat()
 {
 }
 
-int redis_heart_beat::set_base(event_base *base)
+int heart_beat::set_base(event_base *base)
 {
     _base = base;
     return 0;
 }
 
-int redis_heart_beat::update_msg(json state_info)
+int heart_beat::update_msg(json state_info)
 {
     _online_client = state_info["client_num"];
     _online_server = (int)state_info["server_num"] + (int)state_info["relay_num"];
     return 0;
 }
 
-int redis_heart_beat::start()
+int heart_beat::start()
 {
     // 连接redis
     connect_to_redis();
@@ -82,20 +82,20 @@ int redis_heart_beat::start()
     return 0;
 }
 
-int redis_heart_beat::stop()
+int heart_beat::stop()
 {
     event_del(_timeout_ev);
     return 0;
 }
 
-void redis_heart_beat::TimeoutCallback(evutil_socket_t fd, short events, void *arg)
+void heart_beat::TimeoutCallback(evutil_socket_t fd, short events, void *arg)
 {
-    auto svr = static_cast<redis_heart_beat *>(arg);
+    auto svr = static_cast<heart_beat *>(arg);
 
     svr->send_heart_beat();
 }
 
-void redis_heart_beat::Redis_Connect_Cb(const redisAsyncContext *c, int status)
+void heart_beat::Redis_Connect_Cb(const redisAsyncContext *c, int status)
 {
     if (status != REDIS_OK)
     {
@@ -105,7 +105,7 @@ void redis_heart_beat::Redis_Connect_Cb(const redisAsyncContext *c, int status)
     spdlog::info("[{}]: Connected to Redis Success", __class__);
 }
 
-void redis_heart_beat::Redis_Disconnect_Cb(const redisAsyncContext *c, int status)
+void heart_beat::Redis_Disconnect_Cb(const redisAsyncContext *c, int status)
 {
     if (status != REDIS_OK)
     {
@@ -115,7 +115,7 @@ void redis_heart_beat::Redis_Disconnect_Cb(const redisAsyncContext *c, int statu
     spdlog::info("[{}]: redis info: Disconnected Redis", __class__);
 }
 
-int redis_heart_beat::connect_to_redis()
+int heart_beat::connect_to_redis()
 {
 
     // 初始化redis连接
@@ -153,7 +153,7 @@ int redis_heart_beat::connect_to_redis()
     return 0;
 }
 
-json redis_heart_beat::build_beat_msg()
+json heart_beat::build_beat_msg()
 {
 
     json beat_msg = _heart_beat_set_msg;
@@ -176,7 +176,7 @@ json redis_heart_beat::build_beat_msg()
     return beat_msg;
 }
 
-int redis_heart_beat::send_heart_beat()
+int heart_beat::send_heart_beat()
 {
     refresh_beat_info();
 
@@ -204,7 +204,7 @@ int redis_heart_beat::send_heart_beat()
     return 0;
 }
 
-int redis_heart_beat::refresh_beat_info()
+int heart_beat::refresh_beat_info()
 {
 
     _msg_info.PID = getpid();
@@ -218,7 +218,7 @@ int redis_heart_beat::refresh_beat_info()
     return 0;
 }
 
-int redis_heart_beat::update_out_set(json conf)
+int heart_beat::update_out_set(json conf)
 {
     _msg_set.PID = conf["PID"];
     _msg_set.gpssecond = conf["gpssecond"];
@@ -232,14 +232,14 @@ int redis_heart_beat::update_out_set(json conf)
 }
 
 
-double redis_heart_beat::getGnsssecond()
+double heart_beat::getGnsssecond()
 {
     // auto time = timeget();
     // return time2gpst(time, NULL);
     return 0.0;
 }
 
-int redis_heart_beat::getMemory()
+int heart_beat::getMemory()
 {
 #ifdef WIN32
     PROCESS_MEMORY_COUNTERS_EX pmc;

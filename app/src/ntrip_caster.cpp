@@ -14,6 +14,36 @@
 
 #define __class__ "ntrip_caster"
 
+int ntrip_caster::init_license_check()
+{
+    _license_check.gen_register_file();
+    _license_check.load_license_file();
+
+    if (_license_check.active())
+    {
+        spdlog::info("[{}:{}]:License has been verified", __class__, __func__);
+        spdlog::info("[{}:{}]:Current Online Limit: {} ,Current Online Limit: {}", __class__, __func__, _license_check.client_limit(), _license_check.server_limit());
+        spdlog::info("[{}:{}]:The remaining validity period of the lic.ense: {} day", __class__, __func__, (_license_check.expiration_time() - time(0)) / 86400);
+    }
+    else
+    {
+        spdlog::warn("[{}:{}]:License is not vaild, Current Online Limit: {} ,Current Online Limit: {}", __class__, __func__, _license_check.client_limit(), _license_check.server_limit());
+    }
+
+    if (time(0) > _license_check.expiration_time())
+    {
+        spdlog::warn("[{}:{}]: License expired, please replace it with a new valid license, program will reject all connections", __class__, __func__);
+        _compat_listener->disable_accept_new_connect();
+    }
+
+    _license_check_tv.tv_sec = 30;
+    _license_check_tv.tv_usec = 0;
+    _license_check_ev = event_new(_base, -1, EV_PERSIST, License_Check_Callback, this);
+    // 添加超时事件
+    event_add(_license_check_ev, &_license_check_tv);
+    return 0;
+}
+
 void ntrip_caster::License_Check_Callback(evutil_socket_t fd, short events, void *arg)
 {
     auto *svr = static_cast<ntrip_caster *>(arg);
@@ -46,35 +76,29 @@ void ntrip_caster::License_Check_Callback(evutil_socket_t fd, short events, void
 
     svr->_compat_listener->enable_accept_new_connect();
 }
-
-int ntrip_caster::init_license_check()
+int ntrip_caster::init_heart_beat()
 {
-    _license_check.gen_register_file();
-    _license_check.load_license_file();
-
-    if (_license_check.active())
-    {
-        spdlog::info("[{}:{}]:License has been verified", __class__, __func__);
-        spdlog::info("[{}:{}]:Current Online Limit: {} ,Current Online Limit: {}", __class__, __func__, _license_check.client_limit(), _license_check.server_limit());
-        spdlog::info("[{}:{}]:The remaining validity period of the license: {} day", __class__, __func__, (_license_check.expiration_time() - time(0)) / 86400);
-    }
-    else
-    {
-        spdlog::warn("[{}:{}]:License is not vaild, Current Online Limit: {} ,Current Online Limit: {}", __class__, __func__, _license_check.client_limit(), _license_check.server_limit());
-    }
-
-    if (time(0) > _license_check.expiration_time())
-    {
-        spdlog::warn("[{}:{}]: License expired, please replace it with a new valid license, program will reject all connections", __class__, __func__);
-        _compat_listener->disable_accept_new_connect();
-    }
-
-    _license_check_tv.tv_sec = 30;
-    _license_check_tv.tv_usec = 0;
-    _license_check_ev = event_new(_base, -1, EV_PERSIST, License_Check_Callback, this);
-    // 添加超时事件
-    event_add(_license_check_ev, &_license_check_tv);
     return 0;
+}
+
+void ntrip_caster::Heart_Beat_Callback(evutil_socket_t fd, short events, void *arg)
+{
+}
+
+int ntrip_caster::init_info_upload()
+{
+    return 0;
+}
+
+void ntrip_caster::Info_Upload_Callback(evutil_socket_t fd, short events, void *arg)
+{
+
+    //查找所有的client，更新信息
+    
+    //查找所有的server，更新信息
+
+    //更新信息的形式
+    
 }
 
 ntrip_caster::ntrip_caster(json cfg)

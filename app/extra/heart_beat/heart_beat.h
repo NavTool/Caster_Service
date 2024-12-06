@@ -39,7 +39,7 @@ enum heart_beat_method
     HSet
 };
 
-class redis_heart_beat
+class heart_beat
 {
 
 private:
@@ -75,8 +75,8 @@ private:
     // std::string _version = "0.0.4";
 
 public:
-    redis_heart_beat(json conf);
-    ~redis_heart_beat();
+    heart_beat(json conf);
+    ~heart_beat();
 
     int set_base(event_base *base);
 
