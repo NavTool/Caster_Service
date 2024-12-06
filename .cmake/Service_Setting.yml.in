@@ -18,8 +18,8 @@ Ntrip_Listener_Setting:
 Server_Setting:                
   Connect_Timeout: 30         #超时时间(未收到基站数据超过一定时间)(/秒)(≤0 ：关闭) 
   Unsend_Byte_Limit: 128      #当发送缓冲区中未发送字节超过该值则触发关闭连接操作(用来关闭异常的连接)(/字节)(≤0 ：不启用此功能)
-  Heart_Beat_Interval: 0      #发送心跳间隔(/秒)(≤0 ：关闭) 
-  Heart_Beat_Msg: "\r\n"      #心跳包内容
+  Heart_Beat_Interval: 30      #发送心跳间隔(/秒)(≤0 ：关闭) 
+  Heart_Beat_Msg: "CDC200\r\n"      #心跳包内容
   # Data_Record: true         #(未实现)记录接收信息(正式连接建立后启用,不包括header信息)
   # Save_Path: /BaseRecord    #(未实现)保存路径 (格式：/YYYYMMDD/MountName/HHMMSS_ConnectKey.log)
 
@@ -45,7 +45,7 @@ Common_Setting:
 
 #输出运行状态
 Log_Setting:
-  Output_STD: true             #输出状态信息(将信息输出到控制台)
+  Output_STD: false             #输出状态信息(将信息输出到控制台)
   Output_File: true            #将信息输出到文件(仅输出Info及以上级别)
   Output_File_Daily: false     #文件按天分割(两个选项选一个即可,都开会都生成)
   Output_File_Hourly: true     #文件按小时分割(两个输出选项选一个即可,都开会都生成)
