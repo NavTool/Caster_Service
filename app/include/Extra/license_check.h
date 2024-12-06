@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 #include "event2/event.h"
 
 class license_check
@@ -34,4 +35,5 @@ public:
 
 private:
     std::string getMacAddress(const std::string &interfaceName);
+    std::vector<std::string> getAllMacAddresses();
 };
