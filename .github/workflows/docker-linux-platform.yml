@@ -31,10 +31,10 @@ jobs:
             platform: linux/arm64
             dockerfile: ci/docker/dockerfile.rhel
             docker_img: openeuler/openeuler:22.03
-          # - version: centos-7.6.1810-amd64
-          #   platform: linux/amd64
-          #   dockerfile: ci/docker/dockerfile.rhel.aliyun
-          #   docker_img: centos:7.6.1810
+          - version: centos-8-amd64
+            platform: linux/amd64
+            dockerfile: ci/docker/dockerfile.rhel
+            docker_img: centos:centos8
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
