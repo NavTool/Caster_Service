@@ -15,26 +15,26 @@ jobs:
     strategy:
       matrix:
         include:
-          # - version: ubuntu-20.04-amd64
-          #   platform: linux/amd64
-          #   dockerfile: ci/docker/dockerfile.debian
-          #   docker_img: ubuntu:20.04
-          # - version: ubuntu-20.04-arm64
-          #   platform: linux/arm64
-          #   dockerfile: ci/docker/dockerfile.debian
-          #   docker_img: ubuntu:20.04
-          # - version: openeuler-22.03-amd64
-          #   platform: linux/amd64
-          #   dockerfile: ci/docker/dockerfile.rhel
-          #   docker_img: openeuler/openeuler:22.03
-          # - version: openeuler-22.03-arm64
-          #   platform: linux/arm64
-          #   dockerfile: ci/docker/dockerfile.rhel
-          #   docker_img: openeuler/openeuler:22.03
-          - version: centos-7.6.1810-amd64
+          - version: ubuntu-20.04-amd64
             platform: linux/amd64
-            dockerfile: ci/docker/dockerfile.rhel.aliyun
-            docker_img: centos:centos8
+            dockerfile: ci/docker/dockerfile.debian
+            docker_img: ubuntu:20.04
+          - version: ubuntu-20.04-arm64
+            platform: linux/arm64
+            dockerfile: ci/docker/dockerfile.debian
+            docker_img: ubuntu:20.04
+          - version: openeuler-22.03-amd64
+            platform: linux/amd64
+            dockerfile: ci/docker/dockerfile.rhel
+            docker_img: openeuler/openeuler:22.03
+          - version: openeuler-22.03-arm64
+            platform: linux/arm64
+            dockerfile: ci/docker/dockerfile.rhel
+            docker_img: openeuler/openeuler:22.03
+          # - version: centos-7.6.1810-amd64
+          #   platform: linux/amd64
+          #   dockerfile: ci/docker/dockerfile.rhel.aliyun
+          #   docker_img: centos:centos8
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -71,8 +71,7 @@ jobs:
       - name: Create container and run container
         run: |
           docker run --name build-container-${{ matrix.version }} -d build-image-${{ matrix.version }}
-          
-          
+               
       - name: Run build script inside container
         run: |
           docker exec build-container-${{ matrix.version }} mkdir workspace
