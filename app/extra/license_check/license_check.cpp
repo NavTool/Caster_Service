@@ -12,6 +12,7 @@
 #include <netpacket/packet.h>
 #endif
 
+#include <vector>
 #include <cstring>
 #include <iomanip>
 #include <cstdint>
@@ -74,9 +75,18 @@ license_check::~license_check()
 
 std::string license_check::gen_register_file(std::string file_path)
 {
-    _register_str = getMacAddress("eth0").substr(6);
+    auto macs=getAllMacAddresses();
+    _register_str="00:00:00:00:00:00";
+    for(auto iter:macs)
+    {
+        if(iter !="00:00:00:00:00:00")
+        {
+            _register_str=iter;
+        }
+    }
+    // _register_str = getMacAddress("eth0");
     CRegister reg;
-    auto reg_str = reg.genMachineCode(_register_str);
+    auto reg_str = reg.genMachineCode(_register_str.substr(6));
 
     std::ofstream outfile(file_path);
     if (outfile)
@@ -192,5 +202,68 @@ std::string license_check::getMacAddress(const std::string &interfaceName)
 
     freeifaddrs(ifaddr); // 释放地址结构
     return std::string(mac_address);
+}
+#endif
+
+#ifdef WIN32
+std::vector<std::string> license_check::getAllMacAddresses()
+{
+    ULONG bufferSize = 0;
+    GetAdaptersInfo(nullptr, &bufferSize); // 获取所需的缓冲区大小
+
+    std::vector<BYTE> buffer(bufferSize);
+    IP_ADAPTER_INFO *adapterInfo = reinterpret_cast<IP_ADAPTER_INFO *>(buffer.data());
+
+    std::vector<std::string> macAddresses;
+
+    if (GetAdaptersInfo(adapterInfo, &bufferSize) == ERROR_SUCCESS)
+    {
+        IP_ADAPTER_INFO *pAdapter = adapterInfo;
+        while (pAdapter)
+        {
+            char macStr[18];
+            std::snprintf(macStr, sizeof(macStr), "%02X:%02X:%02X:%02X:%02X:%02X",
+                          pAdapter->Address[0], pAdapter->Address[1], pAdapter->Address[2],
+                          pAdapter->Address[3], pAdapter->Address[4], pAdapter->Address[5]);
+            macAddresses.push_back(std::string(macStr));
+            pAdapter = pAdapter->Next;
+        }
+    }
+
+    return macAddresses;
+}
+#else
+std::vector<std::string> license_check::getAllMacAddresses()
+{
+    struct ifaddrs *ifaddr, *ifa;
+    std::vector<std::string> macAddresses;
+
+    // 获取系统中所有接口的地址
+    if (getifaddrs(&ifaddr) == -1)
+    {
+        perror("getifaddrs");
+        return macAddresses; // 如果获取失败，返回空列表
+    }
+
+    // 遍历接口列表
+    for (ifa = ifaddr; ifa != NULL; ifa = ifa->ifa_next)
+    {
+        if (ifa->ifa_addr == NULL)
+            continue;
+
+        // 检查接口是否是AF_PACKET类型
+        if (ifa->ifa_addr->sa_family == AF_PACKET)
+        {
+            struct sockaddr_ll *s = (struct sockaddr_ll *)ifa->ifa_addr;
+            char mac_address[18];
+            snprintf(mac_address, sizeof(mac_address), "%02x:%02x:%02x:%02x:%02x:%02x",
+                     s->sll_addr[0], s->sll_addr[1], s->sll_addr[2],
+                     s->sll_addr[3], s->sll_addr[4], s->sll_addr[5]);
+            macAddresses.push_back(std::string(mac_address));
+        }
+    }
+
+    freeifaddrs(ifaddr); // 释放地址结构
+    return macAddresses;
 }
 #endif
