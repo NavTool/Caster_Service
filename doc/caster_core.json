@@ -1,0 +1,13 @@
+{
+    "mount_point":"KORO6",     //挂载点名
+    "user_name":"none",        //用户名
+    "ip":"127.0.0.1",          //ip
+    "port":54964,              //端口
+    "online_time":1734342012,  //上线时刻
+    "online_seconds":83,       //累计在线时长
+    "send_speed":0.0,          //发送数据速度  单位  byte/s
+    "send_total":0,            //发送数据量    单位  byte
+    "recv_speed":8963.0,       //接收数据速度  单位  byte/s
+    "recv_total":111252,       //接收数据量    单位  byte
+    "update_time":1734342100   //记录更新时间
+}
