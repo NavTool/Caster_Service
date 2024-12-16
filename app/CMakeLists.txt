@@ -83,6 +83,8 @@ include_directories(${PROJECT_NAME} ${CMAKE_CURRENT_LIST_DIR}/include/Compontent
 include_directories(${PROJECT_NAME} ${CMAKE_CURRENT_LIST_DIR}/include/Connector)
 include_directories(${PROJECT_NAME} ${CMAKE_CURRENT_LIST_DIR}/include/DB)
 include_directories(${PROJECT_NAME} ${CMAKE_CURRENT_LIST_DIR}/extra)
+include_directories(${PROJECT_NAME} ${CMAKE_CURRENT_LIST_DIR}/extra/heart_beat)
+include_directories(${PROJECT_NAME} ${CMAKE_CURRENT_LIST_DIR}/extra/license_check)
 
 include_directories(${PROJECT_NAME} ${CMAKE_CURRENT_LIST_DIR}/src)
 

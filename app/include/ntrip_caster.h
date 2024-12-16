@@ -10,8 +10,8 @@
 #include "Carrier/source_ntrip.h"
 #include "DB/relay_account_tb.h"
 
-#include "heart_beat/heart_beat.h"
-#include "license_check/license_check.h"
+#include "../extra/heart_beat/heart_beat.h"
+#include "../extra/license_check/license_check.h"
 #include "info_upload/info_upload.h"
 
 #include <event2/util.h>
@@ -142,8 +142,6 @@ private:
     int init_heart_beat();                                                        // 初始化信息上传功能
     static void Heart_Beat_Callback(evutil_socket_t fd, short events, void *arg); // 定期上传信息的回调
 
-
-
 private:
     // 扩展模块 站点信息上报功能--------------------------------------------------------------------------
     event *_info_upload_ev;
@@ -153,8 +151,5 @@ private:
 
     int init_info_upload();                                                        // 初始化信息上传功能
     static void Info_Upload_Callback(evutil_socket_t fd, short events, void *arg); // 定期上传信息的回调
-
-
-
 
 };

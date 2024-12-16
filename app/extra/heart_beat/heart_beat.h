@@ -75,8 +75,10 @@ private:
     // std::string _version = "0.0.4";
 
 public:
-    heart_beat(json conf);
+    heart_beat();
     ~heart_beat();
+
+    int init(json conf);
 
     int set_base(event_base *base);
 

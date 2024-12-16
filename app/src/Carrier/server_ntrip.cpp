@@ -66,7 +66,7 @@ int server_ntrip::stop()
     close_req["req_type"] = CLOSE_NTRIP_SERVER;
     QUEUE::Push(close_req);
 
-    CASTER::Withdraw_Base_Record(_mount_point.c_str(), _connect_key.c_str());
+    CASTER::Withdraw_Base_Record(_mount_point.c_str(), _user_name.c_str(), _connect_key.c_str());
 
     AUTH::Add_Logout_Record(_user_name.c_str(), _connect_key.c_str());
 
@@ -271,7 +271,7 @@ void server_ntrip::Auth_Login_Callback(const char *request, void *arg, AuthReply
     switch (reply->type)
     {
     case AUTH_REPLY_OK:
-        CASTER::Register_Base_Record(svr->_mount_point.c_str(), svr->_connect_key.c_str(), Caster_Register_Callback, svr);
+        CASTER::Register_Base_Record(svr->_mount_point.c_str(), svr->_user_name.c_str(), svr->_connect_key.c_str(), Caster_Register_Callback, svr);
         break;
     case AUTH_REPLY_ERR:
         spdlog::info("[{}]: AUTH_REPLY_ERROR user [{}] , using mount [{}], addr:[{}:{}]", __class__, svr->_user_name, svr->_mount_point, svr->_ip, svr->_port);

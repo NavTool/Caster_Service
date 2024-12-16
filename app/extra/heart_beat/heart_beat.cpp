@@ -18,12 +18,19 @@
 #include <sys/resource.h>
 #endif
 
-
 // #include "rtklib.h"
 
 #define __class__ "redis_heart_beat"
 
-heart_beat::heart_beat(json conf)
+heart_beat::heart_beat()
+{
+}
+
+heart_beat::~heart_beat()
+{
+}
+
+int heart_beat::init(json conf)
 {
     _heart_beat_config = conf;
 
@@ -53,10 +60,7 @@ heart_beat::heart_beat(json conf)
 
     _online_client = _online_server = 0;
     _start_tm = time(0);
-}
-
-heart_beat::~heart_beat()
-{
+    return 0;
 }
 
 int heart_beat::set_base(event_base *base)
@@ -231,7 +235,6 @@ int heart_beat::update_out_set(json conf)
     return 0;
 }
 
-
 double heart_beat::getGnsssecond()
 {
     // auto time = timeget();
@@ -245,18 +248,19 @@ int heart_beat::getMemory()
     PROCESS_MEMORY_COUNTERS_EX pmc;
     SIZE_T virtualMemUsedByMe;
     SIZE_T physicalMemUsedByMe;
-    if (GetProcessMemoryInfo(GetCurrentProcess(), reinterpret_cast<PROCESS_MEMORY_COUNTERS*>(&pmc), sizeof(pmc)))
+    if (GetProcessMemoryInfo(GetCurrentProcess(), reinterpret_cast<PROCESS_MEMORY_COUNTERS *>(&pmc), sizeof(pmc)))
     {
-        virtualMemUsedByMe = pmc.PrivateUsage; // 当前进程使用的虚拟内存大小
+        virtualMemUsedByMe = pmc.PrivateUsage;    // 当前进程使用的虚拟内存大小
         physicalMemUsedByMe = pmc.WorkingSetSize; // 当前进程使用的物理内存大小
 
-        //std::cout << "Virtual Memory Used: " << virtualMemUsedByMe / (1024 * 1024) << " MB" << std::endl;
-        //std::cout << "Physical Memory Used: " << physicalMemUsedByMe / (1024 * 1024) << " MB" << std::endl;
-    } else
+        // std::cout << "Virtual Memory Used: " << virtualMemUsedByMe / (1024 * 1024) << " MB" << std::endl;
+        // std::cout << "Physical Memory Used: " << physicalMemUsedByMe / (1024 * 1024) << " MB" << std::endl;
+    }
+    else
     {
-        virtualMemUsedByMe = 0; // 当前进程使用的虚拟内存大小
+        virtualMemUsedByMe = 0;  // 当前进程使用的虚拟内存大小
         physicalMemUsedByMe = 0; // 当前进程使用的物理内存大小
-        //std::cerr << "GetProcessMemoryInfo failed\n";
+        // std::cerr << "GetProcessMemoryInfo failed\n";
     }
     return virtualMemUsedByMe;
 
