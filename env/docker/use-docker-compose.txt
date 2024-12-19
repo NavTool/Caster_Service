@@ -19,10 +19,10 @@ docker load -i   xxxxx.tar
 
 
 在docker-compose工作目录下启动
-docker compose up -d        -d是后台运行
+docker-compose up -d        -d是后台运行
 
 
-docker compose ps
+docker-compose ps
 
 
 

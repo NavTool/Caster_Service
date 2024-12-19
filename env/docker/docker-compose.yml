@@ -11,7 +11,8 @@ services:
     depends_on:
       - redis
     command: ["/app/Caster_Service"]  # 这里替换为你的可执行程序名称
-    #restart: always
+    restart: always
+    privileged: true  # 添加特权模式
 
   redis:
     image: redis:7.4.0 # 使用空的容器镜像
@@ -22,7 +23,7 @@ services:
     volumes:
       - ./app/env:/app/env  # 将你的自定义配置文件挂载到容器中
     command: ["redis-server"] #, "/app/env/redis.conf"]  # 使用自定义配置文件启动Redis
-    #restart: always
+    restart: always
     sysctls:
       - net.core.somaxconn=1024
    #   - vm.overcommit_memory=1  # 启用内存过度分配
