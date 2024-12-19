@@ -76,30 +76,6 @@ void ntrip_caster::License_Check_Callback(evutil_socket_t fd, short events, void
 
     svr->_compat_listener->enable_accept_new_connect();
 }
-int ntrip_caster::init_heart_beat()
-{
-    return 0;
-}
-
-void ntrip_caster::Heart_Beat_Callback(evutil_socket_t fd, short events, void *arg)
-{
-}
-
-int ntrip_caster::init_info_upload()
-{
-    return 0;
-}
-
-void ntrip_caster::Info_Upload_Callback(evutil_socket_t fd, short events, void *arg)
-{
-
-    //查找所有的client，更新信息
-    
-    //查找所有的server，更新信息
-
-    //更新信息的形式
-    
-}
 
 ntrip_caster::ntrip_caster(json cfg)
 {
@@ -200,8 +176,6 @@ int ntrip_caster::compontent_init()
 
     // 初始化Caster数据分发核心：当前采用的是Redis，后续开发支持脱离redis运行
     CASTER::Init(_caster_core_setting.dump().c_str(), _base);
-    // CASTER::Init(_caster_core_setting.dump().c_str(), _base);
-    // CASTER::Clear();
 
     // 创建listener请求
     _compat_listener = new ntrip_compat_listener(_listener_setting, _base, &_connect_map);
@@ -282,7 +256,7 @@ int ntrip_caster::create_source_ntrip(json req)
     }
 
     auto *source = new source_ntrip(req, con->second);
-    _source_map.insert(std::make_pair(connect_key, source));
+    _source_map.insert(std::pair(connect_key, source));
     source->start();
 
     return 0;
@@ -325,7 +299,7 @@ int ntrip_caster::create_client_ntrip(json req)
     }
     req["Settings"] = _client_setting;
     client_ntrip *ntripc = new client_ntrip(req, con->second);
-    _client_map.insert(std::make_pair(connect_key, ntripc));
+    _client_map.insert(std::pair(connect_key, ntripc));
     ntripc->start();
 
     return 0;
@@ -378,7 +352,7 @@ int ntrip_caster::create_server_ntrip(json req)
     req["Settings"] = _server_setting;
     server_ntrip *ntrips = new server_ntrip(req, con->second);
     // 加入挂载点表中
-    _server_map.insert(std::make_pair(connect_key, ntrips));
+    _server_map.insert(std::pair(connect_key, ntrips));
 
     // 一切准备就绪，启动server
     ntrips->start();

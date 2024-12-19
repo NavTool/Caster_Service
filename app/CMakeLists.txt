@@ -121,16 +121,13 @@ set(CONNECTOR_TYPE_SOURCE
 
 set(EXTRA_SOURCE
     #心跳模块
-    extra/heart_beat/heart_beat.h
-    extra/heart_beat/heart_beat.cpp
+    # extra/heart_beat/heart_beat.h
+    # extra/heart_beat/heart_beat.cpp
     #注册码模块
     extra/license_check/license_check.h
     extra/license_check/license_check.cpp
     extra/license_check/register.h
     extra/license_check/register.cpp
-    #信息上传模块
-    extra/info_upload/info_upload.h
-    extra/info_upload/info_upload.cpp
 )
 
 set(MAIN_SOURCES

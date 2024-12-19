@@ -10,9 +10,9 @@
 #include "Carrier/source_ntrip.h"
 #include "DB/relay_account_tb.h"
 
-#include "../extra/heart_beat/heart_beat.h"
+// #include "../extra/heart_beat/heart_beat.h"
 #include "../extra/license_check/license_check.h"
-#include "info_upload/info_upload.h"
+
 
 #include <event2/util.h>
 #include <event2/event.h>
@@ -48,8 +48,6 @@ private:
 
     bool _output_state;
     int _refresh_state_interval;
-
-
 
 public:
     // 公开的接口
@@ -119,8 +117,6 @@ public:
     static void Request_Process_Cb(evutil_socket_t fd, short what, void *arg);
     static void TimeoutCallback(evutil_socket_t fd, short events, void *arg);
 
-
-
 private:
     // 扩展模块 许可检查功能--------------------------------------------------------------------------
     event *_license_check_ev;
@@ -132,24 +128,15 @@ private:
     static void License_Check_Callback(evutil_socket_t fd, short events, void *arg); // 许可检查的函数
 
 
-private:
-    // 扩展模块 心跳上传功能--------------------------------------------------------------------------
-    event *_heart_beat_ev;
-    timeval _heart_beat_tv;
+// private:
+//     // 扩展模块 心跳上传功能--------------------------------------------------------------------------
+//     event *_heart_beat_ev;
+//     timeval _heart_beat_tv;
 
-    heart_beat _heart_beat;
+//     heart_beat _heart_beat;
 
-    int init_heart_beat();                                                        // 初始化信息上传功能
-    static void Heart_Beat_Callback(evutil_socket_t fd, short events, void *arg); // 定期上传信息的回调
+//     int init_heart_beat();                                                        // 初始化信息上传功能
+//     static void Heart_Beat_Callback(evutil_socket_t fd, short events, void *arg); // 定期上传信息的回调
 
-private:
-    // 扩展模块 站点信息上报功能--------------------------------------------------------------------------
-    event *_info_upload_ev;
-    timeval _info_upload_tv;
-
-    info_upload _info_upload;
-
-    int init_info_upload();                                                        // 初始化信息上传功能
-    static void Info_Upload_Callback(evutil_socket_t fd, short events, void *arg); // 定期上传信息的回调
 
 };

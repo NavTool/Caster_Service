@@ -1,7 +1,5 @@
 #include "heart_beat.h"
 
-#include <unistd.h>
-
 #include <sys/types.h>
 
 #ifdef WIN32
@@ -12,6 +10,7 @@
 #include <windows.h>
 #include <psapi.h>
 #else
+#include <unistd.h>
 #include <ifaddrs.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>

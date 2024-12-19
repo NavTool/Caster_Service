@@ -1,6 +1,6 @@
 安装docker
     yum install docker
-安装docker compose（对于低版本的docker 内部不继承compose，因此还需要下载docker-compose）
+安装docker compose（对于低版本的docker 内部不集成compose，因此还需要下载docker-compose）
     yum install docker-compose
 
 启动docker
