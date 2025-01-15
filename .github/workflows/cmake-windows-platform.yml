@@ -52,8 +52,12 @@ jobs:
       run: |
         .\ci\build_in_windows.ps1
 
+    - name: Get tag version
+      id: tag_version
+      run: echo "::set-output name=tag_version::$(git describe --tags --dirty=-dev)"
+        
     - name: Upload artifacts
       uses: actions/upload-artifact@v4.3.3
       with:
-        name: build-artifacts-${{ matrix.version }}
+        name: Caster_Service-${{ steps.tag_version.outputs.tag_version }}-${{ matrix.version }}
         path: ./bin
