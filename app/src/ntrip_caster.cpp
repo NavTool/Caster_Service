@@ -22,7 +22,7 @@ int ntrip_caster::init_license_check()
     if (_license_check.active())
     {
         spdlog::info("[{}:{}]:License has been verified", __class__, __func__);
-        spdlog::info("[{}:{}]:Current Online Limit: {} ,Current Online Limit: {}", __class__, __func__, _license_check.client_limit(), _license_check.server_limit());
+        spdlog::info("[{}:{}]:Current Online Client Limit: {} ,Current Online Server Limit: {}", __class__, __func__, _license_check.client_limit(), _license_check.server_limit());
         spdlog::info("[{}:{}]:The remaining validity period of the lic.ense: {} day", __class__, __func__, (_license_check.expiration_time() - time(0)) / 86400);
     }
     else
