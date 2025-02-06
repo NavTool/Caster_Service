@@ -15,14 +15,14 @@ jobs:
     strategy:
       matrix:
         include:
-          - version: ubuntu-22.04-amd64
+          - version: ubuntu-20.04-amd64
             platform: linux/amd64
             dockerfile: ci/docker/dockerfile.debian
-            docker_img: ubuntu:22.04
-          - version: ubuntu-22.04-arm64
+            docker_img: ubuntu:20.04
+          - version: ubuntu-20.04-arm64
             platform: linux/arm64
             dockerfile: ci/docker/dockerfile.debian
-            docker_img: ubuntu:22.04
+            docker_img: ubuntu:20.04
           - version: openeuler-22.03-amd64
             platform: linux/amd64
             dockerfile: ci/docker/dockerfile.rhel
