@@ -149,7 +149,7 @@ int ntrip_caster::periodic_task()
     if (_output_state) // 输出状态信息
     {
         spdlog::info("[Service Statistic]: Connection: {}, Online Server: {}, Online Client: {} , Use Memory: {} BYTE.", _connect_map.size(), _server_map.size(), _client_map.size(), util_get_use_memory());
-        spdlog::info("[CasterCore Status]: Online MPT: ,");
+        spdlog::info("[CasterCore Status]: {}",CASTER::Get_Status());
     }
 
     // 更新记录的状态信息
@@ -196,7 +196,7 @@ int ntrip_caster::compontent_stop()
 
 int ntrip_caster::extra_init()
 {
-    init_license_check();
+    // init_license_check();
 
     return 0;
 }

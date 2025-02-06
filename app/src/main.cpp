@@ -109,6 +109,7 @@ json load_Core_Conf(const char *conf_directory)
     auto Caster_Setting = Conf["Caster_Setting"];
     conf["Update_Intv"] = Caster_Setting["Update_Intv"].as<int>();
     conf["Unactive_Time"] = Caster_Setting["Unactive_Time"].as<int>();
+    conf["Key_Expire_Time"] = Caster_Setting["Key_Expire_Time"].as<int>();
 
     auto Base_Setting = Conf["Base_Setting"];
     conf["Base_Enable_Mult"] = Base_Setting["Enable_Mult"].as<bool>();
@@ -216,10 +217,12 @@ int main(int argc, char **argv)
             if (!strcmp(argv[i], "-port")) // 监听端口
             {
                 listen_port = atoi(argv[i + 1]);
+                spdlog::info("set listen port: {}", listen_port);
             }
             else if (!strcmp(argv[i], "-conf")) // 配置文件路径
             {
                 conf_path = argv[i + 1];
+                spdlog::info("set conf path: {}", conf_path);
             }
         }
     }
@@ -237,7 +240,7 @@ int main(int argc, char **argv)
 
     if (listen_port > 0)
     {
-        cfg["Service_Setting"]["Ntrip_Listener"]["Port"] = listen_port;
+        cfg["Service_Setting"]["Ntrip_Listener"]["Listen_Port"] = listen_port;
     }
 
     // 日志输出选项
@@ -286,8 +289,8 @@ int main(int argc, char **argv)
         {
             spdlog::info("Write log to File Rotate...");
             size_t max_file_size = log_rotating_size * 1024 * 1024; // 单个日志文件大小：X MB
-            size_t max_files = log_rotating_quata;                   // 最多保留 X 个文件
-            sinks.push_back(std::make_shared<spdlog::sinks::rotating_file_sink_st>(log_save_path,max_file_size,max_files));
+            size_t max_files = log_rotating_quata;                  // 最多保留 X 个文件
+            sinks.push_back(std::make_shared<spdlog::sinks::rotating_file_sink_st>(log_save_path, max_file_size, max_files));
         }
     }
     // 把所有sink放入logger
