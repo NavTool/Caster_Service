@@ -580,7 +580,7 @@ int main(int argcc, char **argvv)
         str2str(svr, argc, argv.data());
     }
 
-    sleepms(1000);
+    // sleepms(1000);
     for (intrflg = 0; !intrflg;)
     {
         printf("taskpath:%s\n", filename.c_str());
