@@ -476,10 +476,11 @@ json ntrip_compat_listener::decode_bufferevent_req(bufferevent *bev, std::string
     json item;
 
     size_t headerlen = 0;
-    char *header = evbuffer_readln(evbuf, &headerlen, EVBUFFER_EOL_CRLF);
+
     while (1)
     {
-        header = evbuffer_readln(evbuf, &headerlen, EVBUFFER_EOL_CRLF);
+        char *header = evbuffer_readln(evbuf, &headerlen, EVBUFFER_EOL_CRLF);
+        // header = evbuffer_readln(evbuf, &headerlen, EVBUFFER_EOL_CRLF);
         if (header == NULL)
         {
             break;
