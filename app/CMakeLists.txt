@@ -183,3 +183,15 @@ include_directories(${PROJECT_NAME} ${JSON_INCLUDE_PATH})
 include_directories(${PROJECT_NAME} ${SPDLOG_INCLUDE_PATH})
 #yaml
 target_link_libraries(${PROJECT_NAME} yaml-cpp)
+
+
+
+set(REG_SOURCES
+   src/reg_check.cpp
+       extra/license_check/register.h
+    extra/license_check/register.cpp
+)
+add_executable(reg_check ${REG_SOURCES}  )
+include_directories(reg_check ${SPDLOG_INCLUDE_PATH})
+
+set_target_properties(reg_check PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin/tool")

@@ -1,0 +1,44 @@
+GET / HTTP/1.1
+User-Agent: NTRIP CNHiNTRIPClient/2023
+Accept: */*
+Connection: close
+Ntrip-Version: Ntrip/2.0
+Host: 81.68.72.44:4202
+Authorization: Basic VkNGQ0w6VmNmY2wxNzI1
+
+
+
+
+HTTP/1.1 200 OK
+Ntrip-Version: Ntrip/2.0
+Ntrip-Flags: 
+Server: SubCarrier Systems Corp SNIP simpleNTRIP_Caster_[wBAS]R3.17.00/of:Dec 12 2024
+Date: Fri, 09 May 2025 01:27:53 UTC
+Connection: close
+Content-Type: gnss/sourcetable
+Content-Length: 514
+
+STR;FTMC;Fort Mac;CMR+;0(1),5(1);2;GPS+GLO;SNIP;CAN;56.78;-111.43;1;0;sNTRIP;none;N;N;0;none;
+STR;LAC;Red Deer;RTCM 3.0;1004(1),1006(10),1008(10),1012(1),1013(10),1019(1),1020(1),1033(10);2;GPS+GLO;SNIP;CAN;52.47;-113.71;1;0;sNTRIP;none;N;N;3740;none;
+STR;laniuk;Red Deer;RTCM 3.2;1004(1),1006(10),1012(1),1013(10),1033(10),1074(900),1084(900),1094(1),1124(1),1230(10);2;GPS+GLO+GAL+BDS;SNIP;CAN;53.52;-112.07;1;0;sNTRIP;none;N;N;5380;none;
+NET;SNIP;GPSBASE;N;N;None;192.168.200.23:2101;None;;
+ENDSOURCETABLE
+
+
+
+
+HTTP/1.1 200 OK
+Ntrip-Version: Ntrip/2.0
+Server: Koro_Caster/1.1.7-59-gee1e339e
+Date: Fri, 09 May 2025 01:28:47 GMT
+Connection: close
+Content-Type: gnss/sourcetable
+Content-Length: 322
+
+STR;ABMF00GLP0;;;;;;;;0.0;0.0;0;0;;;N;N;0;none;
+STR;BCEP00DLR0;;;;;;;;0.0;0.0;0;0;;;N;N;0;none;
+STR;CYNE00GUF0;;;;;;;;0.0;0.0;0;0;;;N;N;0;none;
+STR;K803-RTCM32;;;;;;;;0.0;0.0;0;0;;;N;N;0;none;
+STR;MOBS00AUS0;;;;;;;;0.0;0.0;0;0;;;N;N;0;none;
+STR;SSRA03IGS0_SIRGAS2000;;;;;;;;0.0;0.0;0;0;;;N;N;0;none;
+ENDSOURCETABLE
