@@ -95,7 +95,7 @@ int source_ntrip::build_source_table()
     {
         evbuffer_add_printf(_evbuf, "HTTP/1.1 200 OK\r\n");
         evbuffer_add_printf(_evbuf, "Ntrip-Version: Ntrip/2.0\r\n");
-        evbuffer_add_printf(_evbuf, "Ntrip-Flag: \r\n");
+        evbuffer_add_printf(_evbuf, "Ntrip-Flags: \r\n");
         evbuffer_add_printf(_evbuf, "Server: NTRIP CasterService_%s/2.0\r\n", PROJECT_TAG_VERSION);
         evbuffer_add_printf(_evbuf, "Date: %s\r\n", util_get_http_date().c_str());
         evbuffer_add_printf(_evbuf, "Connection: close\r\n");
