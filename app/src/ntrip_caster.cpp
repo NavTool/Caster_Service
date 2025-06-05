@@ -149,7 +149,7 @@ int ntrip_caster::periodic_task()
     if (_output_state) // 输出状态信息
     {
         spdlog::info("[Service Statistic]: Connection: {}, Online Server: {}, Online Client: {} , Use Memory: {} BYTE.", _connect_map.size(), _server_map.size(), _client_map.size(), util_get_use_memory());
-        spdlog::info("[CasterCore Status]: {}",CASTER::Get_Status());
+        spdlog::info("[CasterCore Status]: {}", CASTER::Get_Status());
     }
 
     // 更新记录的状态信息
@@ -208,40 +208,56 @@ int ntrip_caster::extra_stop()
 
 int ntrip_caster::request_process(json req)
 {
-    // 根据请求的类型，执行对应的操作
-    int REQ_TYPE = req["req_type"];
-
-    spdlog::debug("[{}:{}]: \n\r {}", __class__, __func__, req.dump(2));
-    // spdlog::info("[{}:{}]: REQ_TYPE: {}", __class__, __func__,REQ_TYPE);
-
-    switch (REQ_TYPE)
+    try
     {
-    // 一般ntrip请求-------------------------------------
-    case REQUEST_SOURCE_LOGIN:
-        create_source_ntrip(req);
-        break;
-    case CLOSE_NTRIP_SOURCE:
-        close_source_ntrip(req);
-        break;
-    case REQUEST_CLIENT_LOGIN:
-        create_client_ntrip(req);
-        break;
-    case CLOSE_NTRIP_CLIENT:
-        close_client_ntrip(req);
-        break;
-    case REQUEST_SERVER_LOGIN:
-        create_server_ntrip(req);
-        break;
-    case CLOSE_NTRIP_SERVER:
-        close_server_ntrip(req);
-        break;
-    // 虚拟挂载点  //Nearest/Relay/Cors
-    case REQUEST_VIRTUAL_LOGIN:
-        create_client_virtual(req);
-        break;
-    default:
-        spdlog::warn("undefined req_type: {}", REQ_TYPE);
-        break;
+        // 根据请求的类型，执行对应的操作
+        int REQ_TYPE = req["req_type"];
+
+        spdlog::debug("[{}:{}]: \n\r {}", __class__, __func__, req.dump(2));
+        // spdlog::info("[{}:{}]: REQ_TYPE: {}", __class__, __func__,REQ_TYPE);
+
+        switch (REQ_TYPE)
+        {
+        // 一般ntrip请求-------------------------------------
+        case REQUEST_SOURCE_LOGIN:
+            create_source_ntrip(req);
+            break;
+        case CLOSE_NTRIP_SOURCE:
+            close_source_ntrip(req);
+            break;
+        case REQUEST_CLIENT_LOGIN:
+            create_client_ntrip(req);
+            break;
+        case CLOSE_NTRIP_CLIENT:
+            close_client_ntrip(req);
+            break;
+        case REQUEST_SERVER_LOGIN:
+            create_server_ntrip(req);
+            break;
+        case CLOSE_NTRIP_SERVER:
+            close_server_ntrip(req);
+            break;
+        // 虚拟挂载点  //Nearest/Relay/Cors
+        case REQUEST_VIRTUAL_LOGIN:
+            create_client_virtual(req);
+            break;
+        default:
+            spdlog::warn("undefined req_type: {}", REQ_TYPE);
+            break;
+        }
+    }
+    catch (std::exception &e)
+    {
+        std::string dump_safe = "[[dump failed]]";
+        try
+        {
+            dump_safe = req.dump(2);
+        }
+        catch (...)
+        {
+            // 忽略二次异常，保留默认提示
+        }
+        spdlog::warn("[{}:{}]: request_process error, from: [req_dump: {}] ,what: {}", __class__, __func__, dump_safe, e.what());
     }
     return 0;
 }
