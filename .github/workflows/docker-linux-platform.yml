@@ -19,6 +19,10 @@ jobs:
             platform: linux/amd64
             dockerfile: ci/docker/dockerfile.debian
             docker_img: ubuntu:20.04
+          - version: ubuntu-18.04-amd64
+            platform: linux/amd64
+            dockerfile: ci/docker/dockerfile.debian
+            docker_img: ubuntu:18.04
           - version: ubuntu-20.04-arm64
             platform: linux/arm64
             dockerfile: ci/docker/dockerfile.debian
