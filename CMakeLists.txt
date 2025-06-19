@@ -5,7 +5,7 @@ project(Caster_Project)
 set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
 
 # 设置使用的 C++ 标准版本为 C++20
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)  #要求编译器支持所选的标准
 set(CMAKE_CXX_EXTENSIONS ON)  #启用编译器的扩展特性
 
