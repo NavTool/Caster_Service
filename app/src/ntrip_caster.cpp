@@ -273,7 +273,7 @@ int ntrip_caster::create_source_ntrip(json req)
     }
 
     auto *source = new source_ntrip(req, con->second);
-    _source_map.insert(std::pair(connect_key, source));
+    _source_map.insert(std::pair<std::string,source_ntrip*>(connect_key, source));
     source->start();
 
     return 0;
@@ -316,7 +316,7 @@ int ntrip_caster::create_client_ntrip(json req)
     }
     req["Settings"] = _client_setting;
     client_ntrip *ntripc = new client_ntrip(req, con->second);
-    _client_map.insert(std::pair(connect_key, ntripc));
+    _client_map.insert(std::pair<std::string,client_ntrip*>(connect_key, ntripc));
     ntripc->start();
 
     return 0;
@@ -369,7 +369,7 @@ int ntrip_caster::create_server_ntrip(json req)
     req["Settings"] = _server_setting;
     server_ntrip *ntrips = new server_ntrip(req, con->second);
     // 加入挂载点表中
-    _server_map.insert(std::pair(connect_key, ntrips));
+    _server_map.insert(std::pair<std::string,server_ntrip*>(connect_key, ntrips));
 
     // 一切准备就绪，启动server
     ntrips->start();
