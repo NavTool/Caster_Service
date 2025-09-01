@@ -7,6 +7,21 @@
 [submodule "lib/nav_tool-plugin-cpp"]
 	path = lib/nav_tool-plugin-cpp
 	url = https://github.com/NavTool/nav_tool-plugin-cpp.git
-[submodule "lib/caster_extra-plugin-base"]
-	path = lib/caster_extra-plugin-base
-	url = https://github.com/NavTool/caster_extra-plugin-base.git
+[submodule "rely/hiredis"]
+	path = rely/hiredis
+	url = https://github.com/redis/hiredis.git
+[submodule "rely/libevent"]
+	path = rely/libevent
+	url = https://github.com/libevent/libevent.git
+[submodule "rely/spdlog"]
+	path = rely/spdlog
+	url = https://github.com/gabime/spdlog.git
+[submodule "rely/yaml-cpp"]
+	path = rely/yaml-cpp
+	url = https://github.com/jbeder/yaml-cpp.git
+[submodule "rely/json"]
+	path = rely/json
+	url = https://github.com/nlohmann/json.git
+[submodule "rely/rtklib"]
+	path = rely/rtklib
+	url = https://github.com/NavTool/rtklib-2.4.3b34.git
