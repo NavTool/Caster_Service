@@ -48,11 +48,11 @@ jobs:
           fetch-tags: true  # 获取所有的 Git 标签
           submodules: true  # 拉取子模块
 
-      # - uses: actions/checkout@v4
-      #   with:
-      #     repository: NavTool/base_third_relys
-      #     path: rely
-      #     submodules: true  # 拉取子模块
+      - uses: actions/checkout@v4
+        with:
+          repository: NavTool/base_third_relys
+          path: rely
+          submodules: true  # 拉取子模块
 
       - name: Set up QEMU for multi-platform support
         uses: docker/setup-qemu-action@v3

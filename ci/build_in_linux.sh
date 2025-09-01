@@ -20,7 +20,6 @@
 # cmake -G Ninja ..
 # #构建
 # ninja
-git config --global --add safe.directory '*'
 
 #构建主程序
 mkdir build
