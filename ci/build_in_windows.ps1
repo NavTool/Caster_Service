@@ -1,4 +1,6 @@
 
+git config --global --add safe.directory '*'
+
 cmake -B build -DCMAKE_CXX_COMPILER=cl -DCMAKE_C_COMPILER=cl -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=bin 
 
 cmake --build build --config Release -- /m
