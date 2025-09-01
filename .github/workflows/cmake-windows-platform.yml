@@ -46,6 +46,8 @@ jobs:
     #     repository: NavTool/base_third_relys
     #     path: rely
     #     submodules: true  # 拉取子模块
+    - name: Fix git safe.directory issue
+      run: git config --global --add safe.directory /__w/${{ github.event.repository.name }}/${{ github.event.repository.name }}
   
 
     - name: Run build script

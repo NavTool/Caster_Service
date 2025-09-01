@@ -34,13 +34,13 @@ make -j$(nproc)
 cd ..
 
 
-#构建依赖环境
-cd env/redis-7.2.1 && make MALLOC=libc -j$(nproc)
-cd ../..
-mkdir bin/env -p
-mkdir bin/env/redis -p
-cp env/redis-7.2.1/src/redis-server bin/env/redis/redis-server
-cp .cmake/redis_inux.conf.in    bin/env/redis/redis.config
+# #构建依赖环境
+# cd env/redis-7.2.1 && make MALLOC=libc -j$(nproc)
+# cd ../..
+# mkdir bin/env -p
+# mkdir bin/env/redis -p
+# cp env/redis-7.2.1/src/redis-server bin/env/redis/redis-server
+# cp .cmake/redis_inux.conf.in    bin/env/redis/redis.config
 
 #复制部署脚本
 mkdir bin/env/scripts -p
