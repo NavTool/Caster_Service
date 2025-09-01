@@ -4,6 +4,7 @@
 *.user
 build
 bin
+rely
 .vs
 dist
 .svn
