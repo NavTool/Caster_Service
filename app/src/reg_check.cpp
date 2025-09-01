@@ -1,6 +1,7 @@
 
 #include "register.h"
 
+
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/stdout_sinks.h>
 
@@ -67,7 +68,7 @@ std::time_t convertStringToUTCSeconds(const std::string &dateStr)
 
 // 获取网卡的MAC地址
 #ifdef WIN32
-std::string license_check::getMacAddress(const std::string &interfaceName)
+std::string getMacAddress(const std::string &interfaceName)
 {
     ULONG bufferSize = 0;
     GetAdaptersInfo(nullptr, &bufferSize); // 获取所需的缓冲区大小
