@@ -15,6 +15,9 @@ server_ntrip::server_ntrip(json req, bufferevent *bev)
     if (_info["ntrip_version"] == "Ntrip/2.0")
     {
         _NtripVersion2 = true;
+    }
+    if(_info["http_chunked"] == "chunked")
+    {
         _transfer_with_chunked = true;
     }
 
