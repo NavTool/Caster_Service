@@ -48,12 +48,19 @@ void ntrip_caster::License_Check_Callback(evutil_socket_t fd, short events, void
 {
     auto *svr = static_cast<ntrip_caster *>(arg);
 
+    svr->_license_check.load_license_file();
+
     // 许可证是否无效，无效的许可证应用的是试用许可
     //  检查当前是否已经激活
     if (!svr->_license_check.active())
     {
         // 没有激活，写入一条日志，提示需要激活
         spdlog::warn("[{}:{}]: This program does not have a valid license, and the service is restricted, Current Online Limit: {} ,Current Online Limit: {}", __class__, __func__, svr->_license_check.client_limit(), svr->_license_check.server_limit());
+    }
+    else
+    {
+        spdlog::info("[{}:{}]:Current Online Client Limit: {} ,Current Online Server Limit: {}", __class__, __func__, svr->_license_check.client_limit(), svr->_license_check.server_limit());
+        spdlog::info("[{}:{}]:The remaining validity period of the license: {} day", __class__, __func__, (svr->_license_check.expiration_time() - time(0)) / 86400);
     }
 
     // 检查许可证有效期
@@ -196,7 +203,7 @@ int ntrip_caster::compontent_stop()
 
 int ntrip_caster::extra_init()
 {
-    // init_license_check();
+    init_license_check();
 
     return 0;
 }
@@ -273,7 +280,7 @@ int ntrip_caster::create_source_ntrip(json req)
     }
 
     auto *source = new source_ntrip(req, con->second);
-    _source_map.insert(std::pair<std::string,source_ntrip*>(connect_key, source));
+    _source_map.insert(std::pair<std::string, source_ntrip *>(connect_key, source));
     source->start();
 
     return 0;
@@ -316,7 +323,7 @@ int ntrip_caster::create_client_ntrip(json req)
     }
     req["Settings"] = _client_setting;
     client_ntrip *ntripc = new client_ntrip(req, con->second);
-    _client_map.insert(std::pair<std::string,client_ntrip*>(connect_key, ntripc));
+    _client_map.insert(std::pair<std::string, client_ntrip *>(connect_key, ntripc));
     ntripc->start();
 
     return 0;
@@ -369,7 +376,7 @@ int ntrip_caster::create_server_ntrip(json req)
     req["Settings"] = _server_setting;
     server_ntrip *ntrips = new server_ntrip(req, con->second);
     // 加入挂载点表中
-    _server_map.insert(std::pair<std::string,server_ntrip*>(connect_key, ntrips));
+    _server_map.insert(std::pair<std::string, server_ntrip *>(connect_key, ntrips));
 
     // 一切准备就绪，启动server
     ntrips->start();

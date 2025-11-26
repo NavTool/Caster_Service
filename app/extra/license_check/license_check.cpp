@@ -1,5 +1,6 @@
 #include "license_check.h"
 #include "register.h"
+#include "knt/deviceID.h"
 
 #ifdef WIN32
 #include <iphlpapi.h>
@@ -75,18 +76,21 @@ license_check::~license_check()
 
 std::string license_check::gen_register_file(std::string file_path)
 {
-    auto macs=getAllMacAddresses();
-    _register_str="00:00:00:00:00:00";
-    for(auto iter:macs)
-    {
-        if(iter !="00:00:00:00:00:00")
-        {
-            _register_str=iter;
-        }
-    }
+    // auto macs=getAllMacAddresses();
+    // _register_str="00:00:00:00:00:00";
+    // for(auto iter:macs)
+    // {
+    //     if(iter !="00:00:00:00:00:00")
+    //     {
+    //         _register_str=iter;
+    //     }
+    // }
     // _register_str = getMacAddress("eth0");
+
+    _register_str = machineid::machineHash();
+
     CRegister reg;
-    auto reg_str = reg.genMachineCode(_register_str.substr(6));
+    auto reg_str = reg.genMachineCode(_register_str.substr(6, 11));
 
     std::ofstream outfile(file_path);
     if (outfile)
@@ -123,7 +127,7 @@ int license_check::fresh_license_file()
         // 检查许可信息
         CRegister reg;
 
-        if (reg.checkRegest(_register_str, _prev_license_str))
+        if (reg.checkRegest(_register_str.substr(6, 11), _prev_license_str))
         {
             _is_active = true;
             _client_limit = reg.m_client_limit;
