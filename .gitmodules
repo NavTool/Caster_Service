@@ -1,27 +1,18 @@
-[submodule "lib/auth_verify-plugin-redis"]
-	path = lib/auth_verify-plugin-redis
-	url = https://github.com/NavTool/auth_verify-plugin-redis.git
-[submodule "lib/caster_core-plugin-redis"]
-	path = lib/caster_core-plugin-redis
-	url = https://github.com/NavTool/caster_core-plugin-redis.git
-[submodule "lib/nav_tool-plugin-cpp"]
-	path = lib/nav_tool-plugin-cpp
-	url = https://github.com/NavTool/nav_tool-plugin-cpp.git
 [submodule "rely/hiredis"]
 	path = rely/hiredis
-	url = https://github.com/redis/hiredis.git
+	url = ../hiredis.git
 [submodule "rely/libevent"]
 	path = rely/libevent
-	url = https://github.com/libevent/libevent.git
+	url = ../libevent.git
 [submodule "rely/spdlog"]
 	path = rely/spdlog
-	url = https://github.com/gabime/spdlog.git
+	url = ../spdlog.git
 [submodule "rely/yaml-cpp"]
 	path = rely/yaml-cpp
-	url = https://github.com/jbeder/yaml-cpp.git
+	url = ../yaml-cpp.git
 [submodule "rely/json"]
 	path = rely/json
-	url = https://github.com/nlohmann/json.git
+	url = ../json.git
 [submodule "rely/rtklib"]
 	path = rely/rtklib
-	url = https://github.com/NavTool/rtklib-2.4.3b34.git
+	url = ../rtklib-2.4.3b34.git
