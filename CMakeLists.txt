@@ -12,6 +12,7 @@ set(CMAKE_CXX_EXTENSIONS ON)  #启用编译器的扩展特性
 if(MSVC)
     set(CMAKE_CXX_FLAGS_DEBUG "/Zi")
     set(CMAKE_EXE_LINKER_FLAGS_DEBUG "/DEBUG")
+    add_compile_options("/utf-8")
 elseif(CMAKE_COMPILER_IS_GNUCXX)
     set(CMAKE_CXX_FLAGS_DEBUG "-g")
 endif()
