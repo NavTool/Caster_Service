@@ -13,6 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     strategy:
+      fail-fast: false
       matrix:
         include:
           - version: ubuntu-20.04-amd64
@@ -110,4 +111,3 @@ jobs:
         with:
           name: Caster_Service-${{ steps.tag_version.outputs.tag_version }}-${{ matrix.version }}
           path: ./output
-

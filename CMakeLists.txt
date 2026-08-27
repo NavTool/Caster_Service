@@ -1,8 +1,11 @@
-cmake_minimum_required(VERSION 3.05)
+cmake_minimum_required(VERSION 3.5)
 
 project(Caster_Project)
 
 set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
+# CMake 4 rejects policy compatibility below 3.5. Some vendored dependencies
+# still declare older minimum versions, so raise their effective policy version.
+set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
 
 # 设置使用的 C++ 标准版本为 C++20
 set(CMAKE_CXX_STANDARD 17)
@@ -42,7 +45,6 @@ add_subdirectory(rely/)
 add_subdirectory(lib/)
 add_subdirectory(app/)
 add_subdirectory(dev/)
-
 
 
 
