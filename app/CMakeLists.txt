@@ -154,6 +154,8 @@ target_include_directories(${PROJECT_NAME}  PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
 
 #基于工程目录下的配置文件 生成 执行目录下的配置文件
 set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin")
+file(MAKE_DIRECTORY "${CMAKE_SOURCE_DIR}/bin/conf")
+file(MAKE_DIRECTORY "${CMAKE_SOURCE_DIR}/bin/tool")
 configure_file(${CMAKE_SOURCE_DIR}/.cmake/Auth_Verify.yml.in ${CMAKE_SOURCE_DIR}/bin/conf/Auth_Verify.yml @ONLY)
 configure_file(${CMAKE_SOURCE_DIR}/.cmake/Caster_Core.yml.in ${CMAKE_SOURCE_DIR}/bin/conf/Caster_Core.yml @ONLY)
 configure_file(${CMAKE_SOURCE_DIR}/.cmake/Service_Setting.yml.in ${CMAKE_SOURCE_DIR}/bin/conf/Service_Setting.yml @ONLY)

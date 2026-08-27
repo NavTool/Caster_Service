@@ -14,10 +14,21 @@
 
 #define __class__ "ntrip_caster"
 
+namespace
+{
+constexpr const char *DEFAULT_REGISTER_FILE_PATH = "register.lic";
+constexpr const char *DEFAULT_LICENSE_FILE_PATH = "license.lic";
+
+std::string resolve_license_file_path(const std::string &config_path, const char *default_file_name)
+{
+    return config_path == "default" ? default_file_name : config_path;
+}
+}
+
 int ntrip_caster::init_license_check()
 {
-    _license_check.gen_register_file();
-    _license_check.load_license_file();
+    _license_check.gen_register_file(_register_file_path);
+    _license_check.load_license_file(_license_file_path);
 
     if (_license_check.active())
     {
@@ -48,7 +59,7 @@ void ntrip_caster::License_Check_Callback(evutil_socket_t fd, short events, void
 {
     auto *svr = static_cast<ntrip_caster *>(arg);
 
-    svr->_license_check.load_license_file();
+    svr->_license_check.load_license_file(svr->_license_file_path);
 
     // 许可证是否无效，无效的许可证应用的是试用许可
     //  检查当前是否已经激活
@@ -101,6 +112,19 @@ ntrip_caster::ntrip_caster(json cfg)
 
     _refresh_state_interval = _common_setting["Refresh_State_Interval"];
     _output_state = _common_setting["Output_State"];
+
+    std::string register_file_path = DEFAULT_REGISTER_FILE_PATH;
+    std::string license_file_path = DEFAULT_LICENSE_FILE_PATH;
+    if (_service_setting.contains("Register_Info"))
+    {
+        const auto &register_info = _service_setting["Register_Info"];
+        register_file_path = register_info.value("Register_Flie_Path", register_file_path);
+        license_file_path = register_info.value("License_Flie_Path", license_file_path);
+    }
+    _license_check_enabled = !(register_file_path == "Default" && license_file_path == "Default");
+    _register_file_path = resolve_license_file_path(register_file_path, DEFAULT_REGISTER_FILE_PATH);
+    _license_file_path = resolve_license_file_path(license_file_path, DEFAULT_LICENSE_FILE_PATH);
+    _license_check_ev = nullptr;
 
     _base = event_base_new();
 
@@ -203,7 +227,13 @@ int ntrip_caster::compontent_stop()
 
 int ntrip_caster::extra_init()
 {
-    // init_license_check();
+    if (!_license_check_enabled)
+    {
+        spdlog::info("[{}:{}]: License check disabled by Register_Info", __class__, __func__);
+        return 0;
+    }
+
+    init_license_check();
     return 0;
 }
 

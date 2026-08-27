@@ -39,6 +39,14 @@ jobs:
             platform: linux/arm64
             dockerfile: ci/docker/dockerfile.rhel
             docker_img: openeuler/openeuler:22.03
+          - version: openeuler-20.03-amd64
+            platform: linux/amd64
+            dockerfile: ci/docker/dockerfile.rhel
+            docker_img: openeuler/openeuler:20.03
+          - version: openeuler-20.03-arm64
+            platform: linux/arm64
+            dockerfile: ci/docker/dockerfile.rhel
+            docker_img: openeuler/openeuler:20.03
           # - version: centos-7.6.1810-amd64
           #   platform: linux/amd64
           #   dockerfile: ci/docker/dockerfile.rhel.aliyun
@@ -102,5 +110,4 @@ jobs:
         with:
           name: Caster_Service-${{ steps.tag_version.outputs.tag_version }}-${{ matrix.version }}
           path: ./output
-
 

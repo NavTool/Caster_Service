@@ -97,6 +97,21 @@ json load_Caster_Conf(const char *conf_directory)
     conf["Debug_Mode"]["Core_Dump"] = Debug_Mode["Core_Dump"].as<bool>();
     conf["Debug_Mode"]["Output_Debug"] = Debug_Mode["Output_Debug"].as<bool>();
 
+    conf["Register_Info"]["Register_Flie_Path"] = "register.lic";
+    conf["Register_Info"]["License_Flie_Path"] = "license.lic";
+    auto Register_Info = Conf["Register_Info"];
+    if (Register_Info)
+    {
+        if (Register_Info["Register_Flie_Path"])
+        {
+            conf["Register_Info"]["Register_Flie_Path"] = Register_Info["Register_Flie_Path"].as<std::string>();
+        }
+        if (Register_Info["License_Flie_Path"])
+        {
+            conf["Register_Info"]["License_Flie_Path"] = Register_Info["License_Flie_Path"].as<std::string>();
+        }
+    }
+
     return conf;
 }
 

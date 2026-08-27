@@ -123,6 +123,9 @@ private:
     timeval _license_check_tv;
 
     license_check _license_check;
+    bool _license_check_enabled;
+    std::string _register_file_path;
+    std::string _license_file_path;
 
     int init_license_check();                                                        // 初始化许可检查
     static void License_Check_Callback(evutil_socket_t fd, short events, void *arg); // 许可检查的函数

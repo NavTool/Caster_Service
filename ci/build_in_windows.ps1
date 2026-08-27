@@ -1,7 +1,32 @@
+$ErrorActionPreference = "Stop"
 
-cmake -B build -DCMAKE_CXX_COMPILER=cl -DCMAKE_C_COMPILER=cl -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=bin 
+function Invoke-NativeCommand {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$FilePath,
+        [Parameter(Mandatory = $true)]
+        [string[]]$Arguments
+    )
 
-cmake --build build --config Release -- /m
+    & $FilePath @Arguments
+    if ($LASTEXITCODE -ne 0) {
+        exit $LASTEXITCODE
+    }
+}
+
+Invoke-NativeCommand "cmake" @(
+    "-S", ".",
+    "-B", "build",
+    "-DCMAKE_CXX_COMPILER=cl",
+    "-DCMAKE_C_COMPILER=cl",
+    "-DCMAKE_RUNTIME_OUTPUT_DIRECTORY=bin"
+)
+
+Invoke-NativeCommand "cmake" @(
+    "--build", "build",
+    "--config", "Release",
+    "--", "/m"
+)
 
 # 移动所有文件和子目录从 build/release 到 build
 Move-Item -Path "bin\Release\*" -Destination "bin"  -Force
