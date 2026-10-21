@@ -352,12 +352,12 @@ int main(int argc, char **argv)
     // a._license_check.fresh_license_file();
 
     spdlog::info("Start Server...");
-    a.start(); // 原神，启动！
+    const int start_status = a.start();
 
 #ifdef WIN32
     WSACleanup();
 #endif
 
     spdlog::info("Exit!");
-    return 0;
+    return start_status == 0 ? 0 : 1;
 }

@@ -27,7 +27,15 @@ std::string resolve_license_file_path(const std::string &config_path, const char
 
 int ntrip_caster::init_license_check()
 {
-    _license_check.gen_register_file(_register_file_path);
+    try
+    {
+        _license_check.gen_register_file(_register_file_path);
+    }
+    catch (const std::exception &e)
+    {
+        spdlog::error("Cannot initialize registration file '{}': {}", _register_file_path, e.what());
+        return -1;
+    }
     _license_check.load_license_file(_license_file_path);
 
     if (_license_check.active())
@@ -144,7 +152,11 @@ int ntrip_caster::start()
     compontent_init();
 
     // 附加模块初始化
-    extra_init();
+    if (extra_init() != 0)
+    {
+        compontent_stop();
+        return -1;
+    }
 
     // 添加超时事件
     event_add(_timeout_ev, &_timeout_tv);
@@ -233,8 +245,7 @@ int ntrip_caster::extra_init()
         return 0;
     }
 
-    init_license_check();
-    return 0;
+    return init_license_check();
 }
 
 int ntrip_caster::extra_stop()

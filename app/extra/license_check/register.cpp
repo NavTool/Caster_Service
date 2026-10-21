@@ -1649,9 +1649,19 @@ bool CRegister::SerialRegester(std::string register_info, std::string license_co
 
     try
     {
-        int serialSize = license_code.size();
-        if (serialSize != 32)
+        if (license_code.size() < LICENSE_CODE_SIZE || register_info.size() < 4)
             return false;
+
+        // A license is one AES block encoded as 32 hex characters. Ignore all
+        // following bytes, including LF/CRLF added by text editors or echo.
+        license_code.resize(LICENSE_CODE_SIZE);
+        if (!std::all_of(license_code.begin(), license_code.end(), [](unsigned char c) {
+                return (c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') ||
+                       (c >= 'A' && c <= 'F');
+            }))
+        {
+            return false;
+        }
 
         char key2[16] = "caster_sino";
         string outpassword;

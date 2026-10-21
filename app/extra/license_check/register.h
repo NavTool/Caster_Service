@@ -1,4 +1,5 @@
 #pragma once
+#include <cstddef>
 #include <string>
 #include <list>
 
@@ -23,6 +24,8 @@
 class CRegister
 {
 public:
+    static constexpr std::size_t LICENSE_CODE_SIZE = 32;
+
     CRegister();
 
     std::string genMachineCode(std::string input);

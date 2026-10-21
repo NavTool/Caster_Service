@@ -13,7 +13,7 @@ private:
     int _client_limit;       // 允许用户上限
     int _server_limit;       // 允许基站上限
 
-    std::string _register_str;
+    std::string _machine_fragment; // Exact plaintext used for the exported register.lic.
     std::string _license_str;
     std::string _prev_license_str;
 
@@ -21,7 +21,8 @@ public:
     license_check(/* args */);
     ~license_check();
 
-    std::string gen_register_file(std::string file_path = "register.lic"); // 生成注册文件
+    // Throws on write/read-back failure; never silently reports an old file as current.
+    std::string gen_register_file(std::string file_path = "register.lic");
     int load_license_file(std::string file_path = "license.lic");          // 导入许可文件
 
     int fresh_license_file(); // 刷新许可数据

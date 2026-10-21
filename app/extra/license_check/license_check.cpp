@@ -1,5 +1,6 @@
 #include "license_check.h"
 #include "register.h"
+#include "machine_registration.h"
 #include "knt/deviceID.h"
 
 #ifdef WIN32
@@ -77,41 +78,39 @@ license_check::~license_check()
 
 std::string license_check::gen_register_file(std::string file_path)
 {
-    // auto macs=getAllMacAddresses();
-    // _register_str="00:00:00:00:00:00";
-    // for(auto iter:macs)
-    // {
-    //     if(iter !="00:00:00:00:00:00")
-    //     {
-    //         _register_str=iter;
-    //     }
-    // }
-    // _register_str = getMacAddress("eth0");
+    const auto identity = machine_registration::current();
+    std::ofstream outfile(file_path, std::ios::binary | std::ios::trunc);
+    if (!outfile)
+        throw std::runtime_error("Cannot open register file for writing: " + file_path);
+    outfile.write(identity.code.data(), identity.code.size());
+    outfile.close();
+    if (!outfile)
+        throw std::runtime_error("Cannot write/close register file: " + file_path);
 
-    _register_str = machineid::machineHash();
+    std::ifstream infile(file_path, std::ios::binary);
+    std::string stored(CRegister::LICENSE_CODE_SIZE, '\0');
+    infile.read(stored.data(), stored.size());
+    if (!infile || stored != identity.code || infile.peek() != std::char_traits<char>::eof() || infile.bad())
+        throw std::runtime_error("Register file read-back mismatch: " + file_path);
 
-    CRegister reg;
-    auto reg_str = reg.genMachineCode(_register_str.substr(6, 11));
-
-    std::ofstream outfile(file_path);
-    if (outfile)
-    {
-        outfile << reg_str << std::endl;
-        outfile.close();
-    }
-
-    return reg_str;
+    // Publish the exact snapshot that was successfully written and read back.
+    // Verification never recalculates or derives its identity from another source.
+    _machine_fragment = identity.fragment;
+    _prev_license_str.clear();
+    return identity.code;
 }
 
 int license_check::load_license_file(std::string file_path)
 {
-    std::ifstream infile(file_path);
+    std::ifstream infile(file_path, std::ios::binary);
 
     if (infile)
     {
-        std::string fileContent((std::istreambuf_iterator<char>(infile)),
-                                std::istreambuf_iterator<char>());
-        _license_str = fileContent;
+        // Read only the license prefix. Trailing newlines or other content do
+        // not participate in validation or trigger an unnecessary reload.
+        char code[CRegister::LICENSE_CODE_SIZE];
+        infile.read(code, sizeof(code));
+        _license_str.assign(code, static_cast<std::size_t>(infile.gcount()));
     }
 
     fresh_license_file();
@@ -128,7 +127,7 @@ int license_check::fresh_license_file()
         // 检查许可信息
         CRegister reg;
 
-        if (reg.checkRegest(_register_str.substr(6, 11), _prev_license_str))
+        if (reg.checkRegest(_machine_fragment, _prev_license_str))
         {
             _is_active = true;
             _client_limit = reg.m_client_limit;

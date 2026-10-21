@@ -128,6 +128,7 @@ set(EXTRA_SOURCE
     extra/license_check/license_check.cpp
     extra/license_check/register.h
     extra/license_check/register.cpp
+    extra/license_check/machine_registration.h
 )
 
 set(MAIN_SOURCES
@@ -194,6 +195,7 @@ set(REG_SOURCES
     extra/license_check/register.cpp
 )
 add_executable(reg_check ${REG_SOURCES}  )
+target_link_libraries(reg_check knt)
 include_directories(reg_check ${SPDLOG_INCLUDE_PATH})
 
 set_target_properties(reg_check PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin/tool")
