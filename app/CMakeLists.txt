@@ -71,8 +71,8 @@ message(STATUS "GIT VERSION: ${PROJECT_GIT_VERSION}")
 message(STATUS "TAG VERSION: ${PROJECT_TAG_VERSION}")
 message(STATUS "BINARY_NAME: ${PROJECT_NAME}-${PROJECT_VERSION}")
 
-#版本14以下可能会导致abseil不支持
-set(CMAKE_CXX_STANDARD 20)
+# Match the project standard and the GCC 7 toolchains in the Linux CI matrix.
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 
