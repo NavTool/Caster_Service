@@ -87,7 +87,7 @@ int main(int argc, char **argv) {
     const std::string stored((std::istreambuf_iterator<char>(register_file)), std::istreambuf_iterator<char>());
     expect(stored == exported && stored.size() == 32, "exported register file equals the returned code, exactly 32 bytes");
     const auto identity = machine_registration::current();
-    expect(identity.code == stored, "service and reg_check shared identity matches the file");
+    expect(identity.code == stored, "service registration identity matches the file");
     const auto fragment = machineid::machineHash().substr(6, 11);
     expect(identity.fragment == fragment && stored == reg.genMachineCode(fragment), "existing machineHash protocol unchanged");
     const auto service_code = reg.genMachineCode(fragment.substr(7, 4) + "9912311F43");

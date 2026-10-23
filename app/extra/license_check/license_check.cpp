@@ -89,7 +89,8 @@ std::string license_check::gen_register_file(std::string file_path)
 
     std::ifstream infile(file_path, std::ios::binary);
     std::string stored(CRegister::LICENSE_CODE_SIZE, '\0');
-    infile.read(stored.data(), stored.size());
+    // The fixed-size buffer is nonempty; operator[] also works before C++17.
+    infile.read(&stored[0], stored.size());
     if (!infile || stored != identity.code || infile.peek() != std::char_traits<char>::eof() || infile.bad())
         throw std::runtime_error("Register file read-back mismatch: " + file_path);
 

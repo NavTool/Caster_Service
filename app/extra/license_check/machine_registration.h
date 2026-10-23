@@ -6,7 +6,7 @@
 #include <stdexcept>
 #include <string>
 
-// The service and reg_check must export and validate the same machine identity.
+// Registration export and license validation must use the same machine identity.
 struct machine_registration
 {
     std::string fragment;
